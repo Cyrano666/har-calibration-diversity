@@ -1,8 +1,12 @@
 """Install the versioned, checksum-verified numerical artifacts."""
 from pathlib import Path
-import argparse,hashlib,json,urllib.request,zipfile
+import argparse,hashlib,json,urllib.request,zipfile,re
 ROOT=Path(__file__).resolve().parent
 CHECKOUT_SETTINGS={'.gitignore','.gitattributes'}
+def presentation_file(path):
+    # The release freezes numerical evidence. A later editorial revision may
+    # legitimately change its paper, diagrams or instructions in the checkout.
+    return path in CHECKOUT_SETTINGS or path=='README.md' or path.startswith(('paper/','figures/','docs/'))
 def digest(path):
     h=hashlib.sha256()
     with path.open('rb') as f:
@@ -14,7 +18,9 @@ def main():
     path=args.archive
     if path is None:
         cache=ROOT/'downloads';cache.mkdir(exist_ok=True)
-        path=cache/'Online_Resource_1_public.zip'
+        version=spec['version']
+        assert re.fullmatch(r'[A-Za-z0-9._-]+',version)
+        path=cache/('Online_Resource_1_'+version+'.zip')
         if not path.exists():
             partial=path.with_suffix('.part')
             print('Downloading versioned numerical artifacts...',flush=True)
@@ -35,7 +41,7 @@ def main():
             assert dest.is_relative_to(ROOT), row['path']
             data=z.read(row['path'])
             assert len(data)==row['bytes'] and hashlib.sha256(data).hexdigest()==row['sha256'],row['path']
-            if dest.exists() and row['path'] not in CHECKOUT_SETTINGS and digest(dest)!=row['sha256']:
+            if dest.exists() and not presentation_file(row['path']) and digest(dest)!=row['sha256']:
                 raise RuntimeError('Existing file differs; use a clean checkout: '+row['path'])
         for row in manifest:
             dest=ROOT/row['path']

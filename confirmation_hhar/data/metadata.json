@@ -1,0 +1,694 @@
+{
+  "dataset": "hhar",
+  "windows": 10800,
+  "subjects": 9,
+  "classes": [
+    "bike",
+    "sit",
+    "stand",
+    "walk",
+    "stairsup",
+    "stairsdown"
+  ],
+  "before_cap_counts": {
+    "a": 1395,
+    "b": 1532,
+    "c": 1343,
+    "d": 1399,
+    "e": 1505,
+    "f": 1248,
+    "g": 1506,
+    "h": 1382,
+    "i": 1548
+  },
+  "subject_counts": {
+    "1": 1200,
+    "2": 1200,
+    "3": 1200,
+    "4": 1200,
+    "5": 1200,
+    "6": 1200,
+    "7": 1200,
+    "8": 1200,
+    "9": 1200
+  },
+  "class_counts": [
+    1725,
+    2027,
+    1786,
+    2129,
+    1671,
+    1462
+  ],
+  "shape": [
+    10800,
+    3,
+    128
+  ],
+  "feature_count": 35,
+  "quality": [
+    {
+      "user": "a",
+      "device": "nexus4_1",
+      "rows": 323817,
+      "median_interval_ns": 5035401.0,
+      "runs": 9961,
+      "retained_windows": 0,
+      "rejected_windows": 1326
+    },
+    {
+      "user": "a",
+      "device": "nexus4_2",
+      "rows": 323008,
+      "median_interval_ns": 5035400.0,
+      "runs": 10065,
+      "retained_windows": 0,
+      "rejected_windows": 1324
+    },
+    {
+      "user": "a",
+      "device": "s3_1",
+      "rows": 165911,
+      "median_interval_ns": 10115000.0,
+      "runs": 133,
+      "retained_windows": 265,
+      "rejected_windows": 76
+    },
+    {
+      "user": "a",
+      "device": "s3_2",
+      "rows": 162006,
+      "median_interval_ns": 10125000.0,
+      "runs": 186,
+      "retained_windows": 231,
+      "rejected_windows": 127
+    },
+    {
+      "user": "a",
+      "device": "s3mini_1",
+      "rows": 159318,
+      "median_interval_ns": 10009000.0,
+      "runs": 617,
+      "retained_windows": 247,
+      "rejected_windows": 104
+    },
+    {
+      "user": "a",
+      "device": "s3mini_2",
+      "rows": 8568,
+      "median_interval_ns": 14008000.0,
+      "runs": 94,
+      "retained_windows": 9,
+      "rejected_windows": 19
+    },
+    {
+      "user": "a",
+      "device": "samsungold_1",
+      "rows": 109496,
+      "median_interval_ns": 19958000.0,
+      "runs": 19,
+      "retained_windows": 323,
+      "rejected_windows": 17
+    },
+    {
+      "user": "a",
+      "device": "samsungold_2",
+      "rows": 110396,
+      "median_interval_ns": 19958000.0,
+      "runs": 19,
+      "retained_windows": 320,
+      "rejected_windows": 19
+    },
+    {
+      "user": "b",
+      "device": "nexus4_1",
+      "rows": 363270,
+      "median_interval_ns": 5035400.0,
+      "runs": 8428,
+      "retained_windows": 0,
+      "rejected_windows": 1578
+    },
+    {
+      "user": "b",
+      "device": "nexus4_2",
+      "rows": 366648,
+      "median_interval_ns": 5035400.0,
+      "runs": 8161,
+      "retained_windows": 0,
+      "rejected_windows": 1483
+    },
+    {
+      "user": "b",
+      "device": "s3_1",
+      "rows": 183819,
+      "median_interval_ns": 10114000.0,
+      "runs": 168,
+      "retained_windows": 264,
+      "rejected_windows": 101
+    },
+    {
+      "user": "b",
+      "device": "s3_2",
+      "rows": 183297,
+      "median_interval_ns": 10123000.0,
+      "runs": 236,
+      "retained_windows": 256,
+      "rejected_windows": 144
+    },
+    {
+      "user": "b",
+      "device": "s3mini_1",
+      "rows": 180471,
+      "median_interval_ns": 10010000.0,
+      "runs": 862,
+      "retained_windows": 272,
+      "rejected_windows": 101
+    },
+    {
+      "user": "b",
+      "device": "s3mini_2",
+      "rows": 487,
+      "median_interval_ns": 13941000.0,
+      "runs": 17,
+      "retained_windows": 0,
+      "rejected_windows": 2
+    },
+    {
+      "user": "b",
+      "device": "samsungold_1",
+      "rows": 135491,
+      "median_interval_ns": 19928000.0,
+      "runs": 19,
+      "retained_windows": 370,
+      "rejected_windows": 17
+    },
+    {
+      "user": "b",
+      "device": "samsungold_2",
+      "rows": 135285,
+      "median_interval_ns": 19928000.0,
+      "runs": 20,
+      "retained_windows": 370,
+      "rejected_windows": 17
+    },
+    {
+      "user": "c",
+      "device": "nexus4_1",
+      "rows": 299438,
+      "median_interval_ns": 5035400.0,
+      "runs": 8052,
+      "retained_windows": 1,
+      "rejected_windows": 1218
+    },
+    {
+      "user": "c",
+      "device": "nexus4_2",
+      "rows": 317803,
+      "median_interval_ns": 5035400.0,
+      "runs": 9443,
+      "retained_windows": 0,
+      "rejected_windows": 1301
+    },
+    {
+      "user": "c",
+      "device": "s3_1",
+      "rows": 159531,
+      "median_interval_ns": 10114000.0,
+      "runs": 171,
+      "retained_windows": 239,
+      "rejected_windows": 105
+    },
+    {
+      "user": "c",
+      "device": "s3_2",
+      "rows": 156063,
+      "median_interval_ns": 10125000.0,
+      "runs": 195,
+      "retained_windows": 210,
+      "rejected_windows": 139
+    },
+    {
+      "user": "c",
+      "device": "s3mini_1",
+      "rows": 150605,
+      "median_interval_ns": 10009000.0,
+      "runs": 799,
+      "retained_windows": 219,
+      "rejected_windows": 121
+    },
+    {
+      "user": "c",
+      "device": "s3mini_2",
+      "rows": 13169,
+      "median_interval_ns": 13332000.0,
+      "runs": 212,
+      "retained_windows": 6,
+      "rejected_windows": 64
+    },
+    {
+      "user": "c",
+      "device": "samsungold_1",
+      "rows": 114790,
+      "median_interval_ns": 19928000.0,
+      "runs": 17,
+      "retained_windows": 333,
+      "rejected_windows": 15
+    },
+    {
+      "user": "c",
+      "device": "samsungold_2",
+      "rows": 115399,
+      "median_interval_ns": 19928000.0,
+      "runs": 17,
+      "retained_windows": 335,
+      "rejected_windows": 13
+    },
+    {
+      "user": "d",
+      "device": "nexus4_1",
+      "rows": 322433,
+      "median_interval_ns": 5035400.0,
+      "runs": 9142,
+      "retained_windows": 0,
+      "rejected_windows": 1345
+    },
+    {
+      "user": "d",
+      "device": "nexus4_2",
+      "rows": 327526,
+      "median_interval_ns": 5035400.0,
+      "runs": 8628,
+      "retained_windows": 0,
+      "rejected_windows": 1439
+    },
+    {
+      "user": "d",
+      "device": "s3_1",
+      "rows": 159394,
+      "median_interval_ns": 10114000.0,
+      "runs": 111,
+      "retained_windows": 261,
+      "rejected_windows": 68
+    },
+    {
+      "user": "d",
+      "device": "s3_2",
+      "rows": 155720,
+      "median_interval_ns": 10123000.0,
+      "runs": 178,
+      "retained_windows": 229,
+      "rejected_windows": 121
+    },
+    {
+      "user": "d",
+      "device": "s3mini_1",
+      "rows": 155769,
+      "median_interval_ns": 10010000.0,
+      "runs": 512,
+      "retained_windows": 261,
+      "rejected_windows": 79
+    },
+    {
+      "user": "d",
+      "device": "s3mini_2",
+      "rows": 246,
+      "median_interval_ns": 13761000.0,
+      "runs": 9,
+      "retained_windows": 0,
+      "rejected_windows": 0
+    },
+    {
+      "user": "d",
+      "device": "samsungold_1",
+      "rows": 108018,
+      "median_interval_ns": 19958000.0,
+      "runs": 20,
+      "retained_windows": 324,
+      "rejected_windows": 16
+    },
+    {
+      "user": "d",
+      "device": "samsungold_2",
+      "rows": 108018,
+      "median_interval_ns": 19958000.0,
+      "runs": 20,
+      "retained_windows": 324,
+      "rejected_windows": 16
+    },
+    {
+      "user": "e",
+      "device": "nexus4_1",
+      "rows": 371847,
+      "median_interval_ns": 5035400.0,
+      "runs": 9376,
+      "retained_windows": 0,
+      "rejected_windows": 1476
+    },
+    {
+      "user": "e",
+      "device": "nexus4_2",
+      "rows": 396338,
+      "median_interval_ns": 5035400.0,
+      "runs": 8643,
+      "retained_windows": 2,
+      "rejected_windows": 1774
+    },
+    {
+      "user": "e",
+      "device": "s3_1",
+      "rows": 193792,
+      "median_interval_ns": 10114000.0,
+      "runs": 128,
+      "retained_windows": 280,
+      "rejected_windows": 78
+    },
+    {
+      "user": "e",
+      "device": "s3_2",
+      "rows": 190731,
+      "median_interval_ns": 10124000.0,
+      "runs": 211,
+      "retained_windows": 248,
+      "rejected_windows": 127
+    },
+    {
+      "user": "e",
+      "device": "s3mini_1",
+      "rows": 187498,
+      "median_interval_ns": 10010000.0,
+      "runs": 792,
+      "retained_windows": 270,
+      "rejected_windows": 85
+    },
+    {
+      "user": "e",
+      "device": "s3mini_2",
+      "rows": 5116,
+      "median_interval_ns": 14006000.0,
+      "runs": 57,
+      "retained_windows": 4,
+      "rejected_windows": 12
+    },
+    {
+      "user": "e",
+      "device": "samsungold_1",
+      "rows": 135061,
+      "median_interval_ns": 19958000.0,
+      "runs": 20,
+      "retained_windows": 350,
+      "rejected_windows": 20
+    },
+    {
+      "user": "e",
+      "device": "samsungold_2",
+      "rows": 134616,
+      "median_interval_ns": 19928000.0,
+      "runs": 21,
+      "retained_windows": 351,
+      "rejected_windows": 19
+    },
+    {
+      "user": "f",
+      "device": "nexus4_1",
+      "rows": 374309,
+      "median_interval_ns": 5035400.0,
+      "runs": 8947,
+      "retained_windows": 0,
+      "rejected_windows": 1537
+    },
+    {
+      "user": "f",
+      "device": "nexus4_2",
+      "rows": 362131,
+      "median_interval_ns": 5035400.0,
+      "runs": 8551,
+      "retained_windows": 1,
+      "rejected_windows": 1506
+    },
+    {
+      "user": "f",
+      "device": "s3_2",
+      "rows": 180068,
+      "median_interval_ns": 10123000.0,
+      "runs": 223,
+      "retained_windows": 236,
+      "rejected_windows": 150
+    },
+    {
+      "user": "f",
+      "device": "s3mini_1",
+      "rows": 179425,
+      "median_interval_ns": 10010000.0,
+      "runs": 818,
+      "retained_windows": 254,
+      "rejected_windows": 119
+    },
+    {
+      "user": "f",
+      "device": "s3mini_2",
+      "rows": 25335,
+      "median_interval_ns": 11139000.0,
+      "runs": 133,
+      "retained_windows": 31,
+      "rejected_windows": 37
+    },
+    {
+      "user": "f",
+      "device": "samsungold_1",
+      "rows": 131802,
+      "median_interval_ns": 19928000.0,
+      "runs": 18,
+      "retained_windows": 363,
+      "rejected_windows": 15
+    },
+    {
+      "user": "f",
+      "device": "samsungold_2",
+      "rows": 131461,
+      "median_interval_ns": 19928000.0,
+      "runs": 18,
+      "retained_windows": 363,
+      "rejected_windows": 15
+    },
+    {
+      "user": "g",
+      "device": "nexus4_1",
+      "rows": 361234,
+      "median_interval_ns": 5035400.0,
+      "runs": 9891,
+      "retained_windows": 0,
+      "rejected_windows": 1398
+    },
+    {
+      "user": "g",
+      "device": "nexus4_2",
+      "rows": 372149,
+      "median_interval_ns": 5035400.0,
+      "runs": 9641,
+      "retained_windows": 0,
+      "rejected_windows": 1437
+    },
+    {
+      "user": "g",
+      "device": "s3_1",
+      "rows": 194851,
+      "median_interval_ns": 10114000.0,
+      "runs": 163,
+      "retained_windows": 271,
+      "rejected_windows": 89
+    },
+    {
+      "user": "g",
+      "device": "s3_2",
+      "rows": 188462,
+      "median_interval_ns": 10124000.0,
+      "runs": 220,
+      "retained_windows": 242,
+      "rejected_windows": 148
+    },
+    {
+      "user": "g",
+      "device": "s3mini_1",
+      "rows": 186599,
+      "median_interval_ns": 10009000.0,
+      "runs": 947,
+      "retained_windows": 263,
+      "rejected_windows": 101
+    },
+    {
+      "user": "g",
+      "device": "s3mini_2",
+      "rows": 13049,
+      "median_interval_ns": 14002000.0,
+      "runs": 165,
+      "retained_windows": 16,
+      "rejected_windows": 47
+    },
+    {
+      "user": "g",
+      "device": "samsungold_1",
+      "rows": 136080,
+      "median_interval_ns": 19958000.0,
+      "runs": 16,
+      "retained_windows": 357,
+      "rejected_windows": 13
+    },
+    {
+      "user": "g",
+      "device": "samsungold_2",
+      "rows": 135273,
+      "median_interval_ns": 19958000.0,
+      "runs": 17,
+      "retained_windows": 357,
+      "rejected_windows": 14
+    },
+    {
+      "user": "h",
+      "device": "nexus4_1",
+      "rows": 309724,
+      "median_interval_ns": 5035400.0,
+      "runs": 9685,
+      "retained_windows": 0,
+      "rejected_windows": 1195
+    },
+    {
+      "user": "h",
+      "device": "nexus4_2",
+      "rows": 308884,
+      "median_interval_ns": 5035400.0,
+      "runs": 9319,
+      "retained_windows": 0,
+      "rejected_windows": 1312
+    },
+    {
+      "user": "h",
+      "device": "s3_1",
+      "rows": 160695,
+      "median_interval_ns": 10114000.0,
+      "runs": 151,
+      "retained_windows": 240,
+      "rejected_windows": 101
+    },
+    {
+      "user": "h",
+      "device": "s3_2",
+      "rows": 159187,
+      "median_interval_ns": 10123000.0,
+      "runs": 210,
+      "retained_windows": 213,
+      "rejected_windows": 158
+    },
+    {
+      "user": "h",
+      "device": "s3mini_1",
+      "rows": 159279,
+      "median_interval_ns": 10009000.0,
+      "runs": 714,
+      "retained_windows": 239,
+      "rejected_windows": 120
+    },
+    {
+      "user": "h",
+      "device": "s3mini_2",
+      "rows": 18410,
+      "median_interval_ns": 13976000.0,
+      "runs": 245,
+      "retained_windows": 17,
+      "rejected_windows": 74
+    },
+    {
+      "user": "h",
+      "device": "samsungold_1",
+      "rows": 113043,
+      "median_interval_ns": 19958000.0,
+      "runs": 21,
+      "retained_windows": 335,
+      "rejected_windows": 19
+    },
+    {
+      "user": "h",
+      "device": "samsungold_2",
+      "rows": 113079,
+      "median_interval_ns": 19958000.0,
+      "runs": 20,
+      "retained_windows": 338,
+      "rejected_windows": 16
+    },
+    {
+      "user": "i",
+      "device": "nexus4_1",
+      "rows": 365725,
+      "median_interval_ns": 5035400.0,
+      "runs": 8717,
+      "retained_windows": 1,
+      "rejected_windows": 1536
+    },
+    {
+      "user": "i",
+      "device": "nexus4_2",
+      "rows": 374699,
+      "median_interval_ns": 5035400.0,
+      "runs": 8667,
+      "retained_windows": 0,
+      "rejected_windows": 1580
+    },
+    {
+      "user": "i",
+      "device": "s3_1",
+      "rows": 184073,
+      "median_interval_ns": 10114000.0,
+      "runs": 156,
+      "retained_windows": 273,
+      "rejected_windows": 95
+    },
+    {
+      "user": "i",
+      "device": "s3_2",
+      "rows": 182149,
+      "median_interval_ns": 10124000.0,
+      "runs": 210,
+      "retained_windows": 261,
+      "rejected_windows": 126
+    },
+    {
+      "user": "i",
+      "device": "s3mini_1",
+      "rows": 180512,
+      "median_interval_ns": 10010000.0,
+      "runs": 716,
+      "retained_windows": 273,
+      "rejected_windows": 98
+    },
+    {
+      "user": "i",
+      "device": "s3mini_2",
+      "rows": 11323,
+      "median_interval_ns": 13272000.0,
+      "runs": 142,
+      "retained_windows": 11,
+      "rejected_windows": 34
+    },
+    {
+      "user": "i",
+      "device": "samsungold_1",
+      "rows": 130203,
+      "median_interval_ns": 19928000.0,
+      "runs": 19,
+      "retained_windows": 365,
+      "rejected_windows": 15
+    },
+    {
+      "user": "i",
+      "device": "samsungold_2",
+      "rows": 129053,
+      "median_interval_ns": 19928000.0,
+      "runs": 18,
+      "retained_windows": 364,
+      "rejected_windows": 16
+    }
+  ],
+  "raw_rows": 13062475,
+  "source_file_sha256": "d56abf2b26077cd6661100812eec9bf8d6bf109685c617e2697ea8482610307c",
+  "protocol_sha256": "0983610d142c97d1a46852d1920af7927597df0abe9add88a2c1781c7debc215",
+  "stage": "preprocessing complete before predictions"
+}

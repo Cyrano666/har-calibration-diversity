@@ -1,0 +1,53 @@
+{
+  "source_url": "https://archive.ics.uci.edu/static/public/344/heterogeneity%2Bactivity%2Brecognition.zip",
+  "doi": "10.24432/C5689X",
+  "bytes": 822098071,
+  "sha256": "8c9f8dd5f50074feaad2c5cec5d927a4fc8366324de26079629a3de3aef0e124",
+  "members": [
+    {
+      "name": "Activity recognition exp/",
+      "bytes": 0
+    },
+    {
+      "name": "Activity recognition exp/.DS_Store",
+      "bytes": 6148
+    },
+    {
+      "name": "__MACOSX/",
+      "bytes": 0
+    },
+    {
+      "name": "__MACOSX/Activity recognition exp/",
+      "bytes": 0
+    },
+    {
+      "name": "__MACOSX/Activity recognition exp/._.DS_Store",
+      "bytes": 120
+    },
+    {
+      "name": "Activity recognition exp/Phones_accelerometer.csv",
+      "bytes": 1291856387
+    },
+    {
+      "name": "Activity recognition exp/Phones_gyroscope.csv",
+      "bytes": 1379145717
+    },
+    {
+      "name": "Activity recognition exp/readme.txt",
+      "bytes": 4034
+    },
+    {
+      "name": "__MACOSX/Activity recognition exp/._readme.txt",
+      "bytes": 290
+    },
+    {
+      "name": "Activity recognition exp/Watch_accelerometer.csv",
+      "bytes": 327168112
+    },
+    {
+      "name": "Activity recognition exp/Watch_gyroscope.csv",
+      "bytes": 308337085
+    }
+  ],
+  "stage": "source/schema inspection before predictive outcomes"
+}

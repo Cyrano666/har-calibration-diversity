@@ -1,0 +1,138 @@
+{
+  "status": "complete",
+  "classifier_cases": 45,
+  "participants": 9,
+  "windows": 10800,
+  "protocol_lock": {
+    "locked_at_utc": "2026-09-14T05:01:15.109069+00:00",
+    "hhar_predictions_exist": false,
+    "preprocessing_outputs_exist": false,
+    "external_registry": false,
+    "files": {
+      "confirmation_hhar/protocol.json": "0983610d142c97d1a46852d1920af7927597df0abe9add88a2c1781c7debc215",
+      "revision5/models.py": "03a9ade70c7095a54ceba90cc323ef634f3823e7220646392250f344ad7ae447",
+      "revision6/horizon.py": "79f98c7d6fc4b7b16d5be5aebf39f1d7ab692b43e30a23bde345532e15dd7997",
+      "revision6/sequential.py": "cba4bde6132254a73e027a5bbd7fb272f6451e2916585080f0c5e9721738bf87"
+    }
+  },
+  "primary_scope": "LAC, N=240, tolerance=.5, delta=.05",
+  "primary_results": [
+    {
+      "score": "LAC",
+      "N": 240,
+      "policy": "CS_beta_9_1",
+      "coverage": 0.9097543209876545,
+      "set_size": 2.0018878086419756,
+      "delta_coverage": 0.028795216049382677,
+      "delta_size": 0.19507438271604935,
+      "queried": 179.67777777777778,
+      "saving": 0.2513425925925926
+    },
+    {
+      "score": "LAC",
+      "N": 240,
+      "policy": "CS_uniform",
+      "coverage": 0.9105995370370371,
+      "set_size": 2.00535524691358,
+      "delta_coverage": 0.029640432098765393,
+      "delta_size": 0.19854182098765427,
+      "queried": 190.46666666666667,
+      "saving": 0.20638888888888887
+    },
+    {
+      "score": "LAC",
+      "N": 240,
+      "policy": "HG",
+      "coverage": 0.9097830246913582,
+      "set_size": 2.001203395061728,
+      "delta_coverage": 0.028823919753086378,
+      "delta_size": 0.19438996913580242,
+      "queried": 171.41111111111113,
+      "saving": 0.28578703703703706
+    },
+    {
+      "score": "LAC",
+      "N": 240,
+      "policy": "JRC",
+      "coverage": 0.9084290123456792,
+      "set_size": 1.9971972222222223,
+      "delta_coverage": 0.027469907407407367,
+      "delta_size": 0.19038379629629626,
+      "queried": 158.33333333333334,
+      "saving": 0.3402777777777778
+    },
+    {
+      "score": "LAC",
+      "N": 240,
+      "policy": "fixed_25",
+      "coverage": 0.8852677469135803,
+      "set_size": 1.9298754629629629,
+      "delta_coverage": 0.004308641975308642,
+      "delta_size": 0.12306203703703703,
+      "queried": 60.0,
+      "saving": 0.7500000000000004
+    },
+    {
+      "score": "LAC",
+      "N": 240,
+      "policy": "fixed_50",
+      "coverage": 0.8822422839506173,
+      "set_size": 1.8419810185185186,
+      "delta_coverage": 0.0012831790123456843,
+      "delta_size": 0.03516759259259257,
+      "queried": 120.0,
+      "saving": 0.5000000000000002
+    },
+    {
+      "score": "LAC",
+      "N": 240,
+      "policy": "fixed_75",
+      "coverage": 0.8813324074074074,
+      "set_size": 1.8203577160493825,
+      "delta_coverage": 0.00037330246913580307,
+      "delta_size": 0.013544290123456775,
+      "queried": 180.0,
+      "saving": 0.2500000000000001
+    },
+    {
+      "score": "LAC",
+      "N": 240,
+      "policy": "full_reference",
+      "coverage": 0.8809591049382717,
+      "set_size": 1.8068134259259259,
+      "delta_coverage": 0.0,
+      "delta_size": 0.0,
+      "queried": 240.0,
+      "saving": 0.0
+    }
+  ],
+  "primary_intervals": [
+    {
+      "score": "LAC",
+      "N": 240,
+      "baseline": "HG",
+      "difference": 0.05449074074074072,
+      "ci_low": 0.05089506172839502,
+      "ci_high": 0.058503086419753075,
+      "subjects": 9
+    },
+    {
+      "score": "LAC",
+      "N": 240,
+      "baseline": "CS_beta_9_1",
+      "difference": 0.08893518518518517,
+      "ci_low": 0.08521604938271604,
+      "ci_high": 0.0923460648148148,
+      "subjects": 9
+    },
+    {
+      "score": "LAC",
+      "N": 240,
+      "baseline": "CS_uniform",
+      "difference": 0.1338888888888889,
+      "ci_low": 0.12671296296296297,
+      "ci_high": 0.14151234567901233,
+      "subjects": 9
+    }
+  ]
+}

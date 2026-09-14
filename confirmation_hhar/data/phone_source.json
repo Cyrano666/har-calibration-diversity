@@ -1,0 +1,8 @@
+{
+  "entry": "Activity recognition exp/Phones_accelerometer.csv",
+  "bytes": 1291856387,
+  "crc32": 3847420147,
+  "sha256": "d56abf2b26077cd6661100812eec9bf8d6bf109685c617e2697ea8482610307c",
+  "inner_entry_crc_verified": true,
+  "source": "UCI original activity ZIP, outer member stored unchanged"
+}

@@ -21,7 +21,16 @@ At confidence error 0.05 and tolerance 0.5 additional labels, USC-HAD reference-
 | Uniform-prior confidence sequence | 11.74% |
 | Strongest of four tested CS priors, subsequent diagnostic | 15.33% |
 
-The study includes seven public datasets and 354 fitted classifier cases. Six datasets were used during development/reanalysis; USC-HAD was reserved under a locally timestamped protocol before its model predictions were inspected. The stronger-prior diagnostic reuses the same models after confirmation. Repeated fits and query orders are not additional independent participants.
+The main study includes seven public datasets and 354 fitted classifier cases. Six datasets were used during development/reanalysis; USC-HAD was reserved under a locally timestamped protocol before its model predictions were inspected. The stronger-prior diagnostic reuses the same models after confirmation. Repeated fits and query orders are not additional independent participants.
+
+
+## Additional independent-cohort confirmation
+
+The separately specified HHAR study is complete: nine users, 10,800 retained windows and 45 additional LR/MR/IT cases. Its protocol was [publicly committed before preprocessing outcomes or model fitting](https://github.com/Cyrano666/har-calibration-diversity/commit/4cf2155). At the pre-specified primary setting (LAC, N=240, delta=0.05, tau=0.5), label savings are 34.03% for JRC, 28.58% for HG and 25.13% for the fixed Beta(9,1) CS. JRC threshold failure is 1.33% and monitoring-batch inflation failure is 0.28%.
+
+Paired participant-bootstrap differences are 5.45 percentage points versus HG (95% CI 5.09–5.85) and 8.89 versus Beta(9,1) CS (8.52–9.23), conditional on the fitted models and partitions. All 45 acquisition cases were replayed and matched their frozen outputs. The continuity rule retains very few Nexus4 windows, so this does not establish uniform validation across every original device stream. It does not measure human annotation time.
+
+See [the complete HHAR protocol, data audit and results](confirmation_hhar/README.md). These cases are reported separately from the earlier main USC-HAD confirmation.
 
 ## Quick start
 
@@ -33,7 +42,7 @@ python get_artifacts.py
 python reproduce.py --smoke
 ```
 
-The artifact download is approximately 318 MB and supplies frozen predictions and evaluation records. The smoke run compares one complete acquisition case with the frozen results. For all 354 cases run `python reproduce.py`. Quantitative plots can be rebuilt with `python revision7/figures.py`; install Arial to match the distributed typography. Acquisition replay uses saved probabilities and does not require CUDA or classifier refitting.
+The artifact download is approximately 350 MB and supplies frozen predictions and evaluation records. The smoke run compares one complete main-study acquisition case with the frozen results. For the additional HHAR study use `python confirmation_hhar/reproduce.py --smoke`, or omit `--smoke` to replay its 45 cases. If you have already extracted the full Online Resource 1 archive, skip the download command. For all 354 cases run `python reproduce.py`. Quantitative plots can be rebuilt with `python revision7/figures.py`; install Arial to match the distributed typography. Acquisition replay uses saved probabilities and does not require CUDA or classifier refitting.
 
 ## Repository map
 

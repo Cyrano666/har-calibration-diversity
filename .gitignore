@@ -5,6 +5,7 @@ mplcache/
 fitdeps/
 torchdeps/
 pydeps/
+numba_cache/
 rerun_*/
 downloads/
 **/results/predictions/
