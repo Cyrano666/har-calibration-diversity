@@ -1,0 +1,12 @@
+{
+  "locked_at_utc": "2026-09-14T05:01:15.109069+00:00",
+  "hhar_predictions_exist": false,
+  "preprocessing_outputs_exist": false,
+  "external_registry": false,
+  "files": {
+    "confirmation_hhar/protocol.json": "0983610d142c97d1a46852d1920af7927597df0abe9add88a2c1781c7debc215",
+    "revision5/models.py": "03a9ade70c7095a54ceba90cc323ef634f3823e7220646392250f344ad7ae447",
+    "revision6/horizon.py": "79f98c7d6fc4b7b16d5be5aebf39f1d7ab692b43e30a23bde345532e15dd7997",
+    "revision6/sequential.py": "cba4bde6132254a73e027a5bbd7fb272f6451e2916585080f0c5e9721738bf87"
+  }
+}
