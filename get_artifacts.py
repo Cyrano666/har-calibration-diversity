@@ -2,6 +2,7 @@
 from pathlib import Path
 import argparse,hashlib,json,urllib.request,zipfile
 ROOT=Path(__file__).resolve().parent
+CHECKOUT_SETTINGS={'.gitignore','.gitattributes'}
 def digest(path):
     h=hashlib.sha256()
     with path.open('rb') as f:
@@ -34,7 +35,7 @@ def main():
             assert dest.is_relative_to(ROOT), row['path']
             data=z.read(row['path'])
             assert len(data)==row['bytes'] and hashlib.sha256(data).hexdigest()==row['sha256'],row['path']
-            if dest.exists() and digest(dest)!=row['sha256']:
+            if dest.exists() and row['path'] not in CHECKOUT_SETTINGS and digest(dest)!=row['sha256']:
                 raise RuntimeError('Existing file differs; use a clean checkout: '+row['path'])
         for row in manifest:
             dest=ROOT/row['path']
