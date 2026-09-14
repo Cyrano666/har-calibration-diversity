@@ -1,0 +1,293 @@
+{
+  "status": "passed",
+  "exhaustive": [
+    {
+      "engine": "hypergeom",
+      "N": 5,
+      "alpha": 0.1,
+      "delta": 0.05,
+      "permutations": 120,
+      "any_time_failure": 0.0
+    },
+    {
+      "engine": "hypergeom",
+      "N": 5,
+      "alpha": 0.1,
+      "delta": 0.2,
+      "permutations": 120,
+      "any_time_failure": 0.0
+    },
+    {
+      "engine": "hypergeom",
+      "N": 5,
+      "alpha": 0.3,
+      "delta": 0.05,
+      "permutations": 120,
+      "any_time_failure": 0.0
+    },
+    {
+      "engine": "hypergeom",
+      "N": 5,
+      "alpha": 0.3,
+      "delta": 0.2,
+      "permutations": 120,
+      "any_time_failure": 0.0
+    },
+    {
+      "engine": "hypergeom",
+      "N": 5,
+      "alpha": 0.5,
+      "delta": 0.05,
+      "permutations": 120,
+      "any_time_failure": 0.0
+    },
+    {
+      "engine": "hypergeom",
+      "N": 5,
+      "alpha": 0.5,
+      "delta": 0.2,
+      "permutations": 120,
+      "any_time_failure": 0.0
+    },
+    {
+      "engine": "hypergeom",
+      "N": 6,
+      "alpha": 0.1,
+      "delta": 0.05,
+      "permutations": 720,
+      "any_time_failure": 0.0
+    },
+    {
+      "engine": "hypergeom",
+      "N": 6,
+      "alpha": 0.1,
+      "delta": 0.2,
+      "permutations": 720,
+      "any_time_failure": 0.0
+    },
+    {
+      "engine": "hypergeom",
+      "N": 6,
+      "alpha": 0.3,
+      "delta": 0.05,
+      "permutations": 720,
+      "any_time_failure": 0.0
+    },
+    {
+      "engine": "hypergeom",
+      "N": 6,
+      "alpha": 0.3,
+      "delta": 0.2,
+      "permutations": 720,
+      "any_time_failure": 0.0
+    },
+    {
+      "engine": "hypergeom",
+      "N": 6,
+      "alpha": 0.5,
+      "delta": 0.05,
+      "permutations": 720,
+      "any_time_failure": 0.0
+    },
+    {
+      "engine": "hypergeom",
+      "N": 6,
+      "alpha": 0.5,
+      "delta": 0.2,
+      "permutations": 720,
+      "any_time_failure": 0.0
+    },
+    {
+      "engine": "hypergeom",
+      "N": 7,
+      "alpha": 0.1,
+      "delta": 0.05,
+      "permutations": 5040,
+      "any_time_failure": 0.0
+    },
+    {
+      "engine": "hypergeom",
+      "N": 7,
+      "alpha": 0.1,
+      "delta": 0.2,
+      "permutations": 5040,
+      "any_time_failure": 0.0
+    },
+    {
+      "engine": "hypergeom",
+      "N": 7,
+      "alpha": 0.3,
+      "delta": 0.05,
+      "permutations": 5040,
+      "any_time_failure": 0.0
+    },
+    {
+      "engine": "hypergeom",
+      "N": 7,
+      "alpha": 0.3,
+      "delta": 0.2,
+      "permutations": 5040,
+      "any_time_failure": 0.0
+    },
+    {
+      "engine": "hypergeom",
+      "N": 7,
+      "alpha": 0.5,
+      "delta": 0.05,
+      "permutations": 5040,
+      "any_time_failure": 0.0
+    },
+    {
+      "engine": "hypergeom",
+      "N": 7,
+      "alpha": 0.5,
+      "delta": 0.2,
+      "permutations": 5040,
+      "any_time_failure": 0.0
+    },
+    {
+      "engine": "martingale",
+      "N": 5,
+      "alpha": 0.1,
+      "delta": 0.05,
+      "permutations": 120,
+      "any_time_failure": 0.0
+    },
+    {
+      "engine": "martingale",
+      "N": 5,
+      "alpha": 0.1,
+      "delta": 0.2,
+      "permutations": 120,
+      "any_time_failure": 0.0
+    },
+    {
+      "engine": "martingale",
+      "N": 5,
+      "alpha": 0.3,
+      "delta": 0.05,
+      "permutations": 120,
+      "any_time_failure": 0.0
+    },
+    {
+      "engine": "martingale",
+      "N": 5,
+      "alpha": 0.3,
+      "delta": 0.2,
+      "permutations": 120,
+      "any_time_failure": 0.0
+    },
+    {
+      "engine": "martingale",
+      "N": 5,
+      "alpha": 0.5,
+      "delta": 0.05,
+      "permutations": 120,
+      "any_time_failure": 0.0
+    },
+    {
+      "engine": "martingale",
+      "N": 5,
+      "alpha": 0.5,
+      "delta": 0.2,
+      "permutations": 120,
+      "any_time_failure": 0.0
+    },
+    {
+      "engine": "martingale",
+      "N": 6,
+      "alpha": 0.1,
+      "delta": 0.05,
+      "permutations": 720,
+      "any_time_failure": 0.0
+    },
+    {
+      "engine": "martingale",
+      "N": 6,
+      "alpha": 0.1,
+      "delta": 0.2,
+      "permutations": 720,
+      "any_time_failure": 0.0
+    },
+    {
+      "engine": "martingale",
+      "N": 6,
+      "alpha": 0.3,
+      "delta": 0.05,
+      "permutations": 720,
+      "any_time_failure": 0.0
+    },
+    {
+      "engine": "martingale",
+      "N": 6,
+      "alpha": 0.3,
+      "delta": 0.2,
+      "permutations": 720,
+      "any_time_failure": 0.0
+    },
+    {
+      "engine": "martingale",
+      "N": 6,
+      "alpha": 0.5,
+      "delta": 0.05,
+      "permutations": 720,
+      "any_time_failure": 0.0
+    },
+    {
+      "engine": "martingale",
+      "N": 6,
+      "alpha": 0.5,
+      "delta": 0.2,
+      "permutations": 720,
+      "any_time_failure": 0.0
+    },
+    {
+      "engine": "martingale",
+      "N": 7,
+      "alpha": 0.1,
+      "delta": 0.05,
+      "permutations": 5040,
+      "any_time_failure": 0.0
+    },
+    {
+      "engine": "martingale",
+      "N": 7,
+      "alpha": 0.1,
+      "delta": 0.2,
+      "permutations": 5040,
+      "any_time_failure": 0.0
+    },
+    {
+      "engine": "martingale",
+      "N": 7,
+      "alpha": 0.3,
+      "delta": 0.05,
+      "permutations": 5040,
+      "any_time_failure": 0.0
+    },
+    {
+      "engine": "martingale",
+      "N": 7,
+      "alpha": 0.3,
+      "delta": 0.2,
+      "permutations": 5040,
+      "any_time_failure": 0.0
+    },
+    {
+      "engine": "martingale",
+      "N": 7,
+      "alpha": 0.5,
+      "delta": 0.05,
+      "permutations": 5040,
+      "any_time_failure": 0.0
+    },
+    {
+      "engine": "martingale",
+      "N": 7,
+      "alpha": 0.5,
+      "delta": 0.2,
+      "permutations": 5040,
+      "any_time_failure": 0.0
+    }
+  ]
+}

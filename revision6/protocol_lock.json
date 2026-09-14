@@ -1,0 +1,10 @@
+{
+  "locked_at_utc": "2026-09-12T08:50:58.835572+00:00",
+  "confirmation_predictions_exist": false,
+  "external_preregistration": false,
+  "files": {
+    "protocol.json": "a18dbc3e327f4e95bf7e8dd765a7605f5bf723db064d16a3976bda86ec89f91e",
+    "sequential.py": "cba4bde6132254a73e027a5bbd7fb272f6451e2916585080f0c5e9721738bf87",
+    "horizon.py": "79f98c7d6fc4b7b16d5be5aebf39f1d7ab692b43e30a23bde345532e15dd7997"
+  }
+}

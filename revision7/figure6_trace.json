@@ -1,0 +1,9 @@
+{
+  "case": "uschad_0_0_MR",
+  "draw": 0,
+  "N": 480,
+  "reference_q": 0.9994357151694396,
+  "probability_cutoff": 0.0005642848305603687,
+  "plot_floor": 1e-16,
+  "changed_algorithm": false
+}

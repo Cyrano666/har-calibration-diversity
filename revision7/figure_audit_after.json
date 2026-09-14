@@ -1,0 +1,44 @@
+[
+  {
+    "figure": "Fig1.pdf",
+    "minimum_final_pt": 8.631496062992126,
+    "all_fonts_embedded": true,
+    "raster_images": 0
+  },
+  {
+    "figure": "Fig2.pdf",
+    "minimum_final_pt": 8.882690830232589,
+    "all_fonts_embedded": true,
+    "raster_images": 0
+  },
+  {
+    "figure": "Fig3.pdf",
+    "minimum_final_pt": 8.886754450240353,
+    "all_fonts_embedded": true,
+    "raster_images": 0
+  },
+  {
+    "figure": "Fig4.pdf",
+    "minimum_final_pt": 8.883869843191821,
+    "all_fonts_embedded": true,
+    "raster_images": 0
+  },
+  {
+    "figure": "Fig5.pdf",
+    "minimum_final_pt": 8.888643571241985,
+    "all_fonts_embedded": true,
+    "raster_images": 0
+  },
+  {
+    "figure": "Fig6.pdf",
+    "minimum_final_pt": 8.870506863207982,
+    "all_fonts_embedded": true,
+    "raster_images": 0
+  },
+  {
+    "figure": "Fig7.pdf",
+    "minimum_final_pt": 8.880643976697172,
+    "all_fonts_embedded": true,
+    "raster_images": 0
+  }
+]

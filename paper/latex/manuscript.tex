@@ -1,0 +1,532 @@
+\documentclass[pdflatex,sn-basic,Numbered,iicol]{sn-jnl}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{algorithm,algpseudocode}
+\usepackage{graphicx,amsmath,amssymb,booktabs,multirow,placeins,xurl}
+\hypersetup{hypertexnames=false}
+\ifdefined\pdfminorversion\pdfminorversion=7\fi
+\raggedbottom
+\makeatletter
+\setlength{\@dblfptop}{0pt}
+\setlength{\@dblfpsep}{12pt}
+\setlength{\@dblfpbot}{0pt plus 1fil}
+\setlength{\@fptop}{0pt}
+\setlength{\@fpsep}{12pt}
+\setlength{\@fpbot}{0pt plus 1fil}
+\newcommand{\reviewtablecaption}{\def\@captype{table}\caption}
+\makeatother
+\emergencystretch=2em
+\begin{document}
+\title[Emulating conformal reference sets]{Label-efficient emulation of conformal reference sets for wearable activity recognition}
+\abstract{Labeling a complete calibration pool can be expensive when a deployed recognition system already has a fixed calibration reference. We introduce joint rank calibration, a procedure that emulates this finite reference using sequential label queries. A coupled rank-state recursion calibrates the probability of crossing either quantile boundary at any declared query checkpoint. Acquisition stops when the endpoint prediction sets differ by at most a chosen average number of labels on an unlabeled monitoring batch. With high probability over uniform query order, the output contains the reference sets for every input and satisfies the batch-specific inflation tolerance. This conditional guarantee allows arbitrary dependence among fixed pool scores; it does not establish nominal population coverage for a deficient reference. Seven public wearable-activity datasets provide 354 classifier cases, including a prospectively locked USC-HAD confirmation. With confidence error 0.05 and tolerance 0.5 extra labels, confirmation label savings are 23.67\%, compared with 17.91\% for Bonferroni hypergeometric intervals and 11.74\% for a uniform-prior confidence sequence. A subsequent stronger-prior audit raises the latter baseline to 15.33\%, while the proposed result remains unchanged. Savings vary substantially across datasets, including limited gains on difficult recognition problems. The study establishes a finite-reference acquisition procedure and characterizes its practical trade-offs.}
+\keywords{Human activity recognition, Conformal prediction, Label acquisition, Finite-population inference, Sequential calibration}
+\maketitle
+\section{Introduction}
+Wearable activity recognition often transfers a trained classifier to people whose movements differ from the training cohort. Its probability scores may be poorly calibrated under this shift \cite{guo,ovadia}. Prediction sets expose uncertainty by retaining several candidate activities, but constructing them requires labeled calibration examples. For wearable data, these examples frequently comprise repeated windows from a small number of people. The cost of labeling a pool and the reliability of predictions on new people are therefore separate design questions.
+
+Conformal prediction converts a nonconformity score into a prediction set with statistical guarantees under specified sampling assumptions \cite{vovk,angelopoulos}. Subject-disjoint partitions prevent person leakage; they do not, by themselves, establish exchangeability under arbitrary subject shift. Hierarchical and beyond-exchangeability methods address this distinction through additional structure or assumptions \cite{dunn,barber}. Consequently, a historical estimate that a smaller calibration set has acceptable risk may not transfer to a new cohort.
+
+This study targets the labeling cost of preserving a fixed calibration reference. Suppose a finite pool of sensor windows has already been chosen for calibration. Labeling the entire pool defines a reference quantile and its prediction sets. We ask when label acquisition can stop earlier while retaining those sets and limiting the additional candidate labels on a specified batch of inputs. The reference may itself be imperfect; the acquisition procedure protects its predictions without asserting a new population-coverage guarantee.
+
+Uniformly random label-query order permits design-based inference about the reference quantile, conditional on arbitrarily dependent finite score values. We introduce joint rank calibration (JRC), which tracks the number of queried ranks below the reference and whether the reference item itself has appeared. A finite-state recursion evaluates the joint probability of crossing either quantile boundary at any declared checkpoint. Calibrating this probability uses the available error budget more directly than assigning a separate tail allowance to every look. The output threshold is the upper confidence endpoint, and the stopping condition measures the difference in prediction-set membership between the two endpoints on unlabeled monitoring inputs.
+
+Adaptive calibration stopping and the use of unlabeled set-size estimates are already established. Ilyas et al. \cite{ilyas} optimize a joint labeling-and-ambiguity cost under i.i.d. sampling; confidence-sequence methods permit valid optional stopping more generally \cite{howard2021,howard2022,wor}. JRC specializes these ideas to a different statistical contract: containment of a predetermined finite reference for every input, together with bounded average set inflation on a declared monitoring batch. Its contribution is the coupled rank-path calculation and the resulting finite-reference acquisition procedure.
+
+We evaluate this procedure on seven public activity datasets using logistic regression, MiniRocket and a fixed InceptionTime-style classifier. Six datasets support development and reanalysis; USC-HAD provides a separately locked confirmation. Comparisons include two quantile-interval methods, fixed labeling fractions and mechanism ablations. Additional checks examine stronger prior choices in the confidence-sequence baseline and an ambiguous original dataset label. The analysis reports both useful savings and cases requiring nearly all reference labels, separating computational correctness, reference utility and acquisition efficiency.
+
+\section{Related work}
+\subsection{Wearable recognition and uncertainty}
+Recent activity-recognition methods improve the representation or adaptation stage. STF-AL combines temporal, spatial and frequency representations with adversarial domain adaptation \cite{stfal}. CCT-HAR introduces cross-modal sample mining and temporal alignment \cite{ccthar}; TSDFSA studies attention-based feature selection for multiple sensors \cite{tsdfsa}. Their ablations and controlled evaluations motivate testing whether an acquisition gain survives simple competing rules. Their published recognition accuracies are not numerical baselines for JRC because their sensor inputs, training interventions and data access differ.
+
+Uncertainty estimation in HAR also predates this study. Roy et al. examine confidence-calibrated activity recognition \cite{roy}, and hyperdimensional/conformal approaches address uncertainty on microcontrollers \cite{hduq}. We use established MiniRocket \cite{minirocket} and InceptionTime \cite{inception} model families to test sensitivity to the underlying score distribution. The recognition models remain fixed across acquisition policies.
+
+\subsection{Label-efficient stopping and its statistical target}
+Ilyas et al. \cite{ilyas} study a stream of $n$ i.i.d. examples and the cost
+\begin{equation}
+ C(m)=m+(n-m)\,\mathbb E[|T_m(X)|]/K.
+ \label{eq:relatedcost}
+\end{equation}
+Their submitted manuscript uses a time-uniform conformal threshold and estimates normalized set size from all candidate-label scores on unlabeled inputs. The theoretical stopping rule detects a nonnegative lower bound on an oracle cost increment and uses a monotone score-density-ratio assumption in its regret analysis. Section 7 also describes a finite-sample stabilization used in the experiments. Set-size-based stopping and invariance of rank/set operations to increasing score transformations are shared ingredients.
+
+The statistical targets differ. The i.i.d. procedure seeks high-probability population coverage and cost optimality relative to fixed calibration sizes. JRC conditions on one finite reference pool and seeks high-probability inclusion of that pool's reference sets, with bounded additional set size on a separate declared batch. Table~\ref{tab:related} summarizes these contracts. Percentages reported for ImageNet total cost in the submitted Ilyas manuscript cannot be compared directly with our percentages of saved reference labels. The comparison uses its original-submission version and distinguishes the theoretical rule from its stabilized experimental implementation.
+
+Training-conditional validity has a longer history \cite{vovk2012}. Liang et al. \cite{liangstop} study conformal inference with early stopping of neural-network training and reuse of hold-out data; JRC operates after classifier fitting is complete. Xu et al. \cite{active2024} develop active, anytime-valid risk-controlling sets with a labeling policy and risk-predictor assistance. The August 2026 preprint by Skalse et al., \emph{Online Conformal Prediction Beyond Feedback} (arXiv:2608.07139v1), studies a prediction/query game on non-i.i.d. streams. These population-risk and online-game targets differ from protecting a predetermined finite reference, although all address limited labeling resources.
+
+
+\begin{table*}[t]
+\centering\small\setlength{\tabcolsep}{4pt}
+\caption{Related statistical targets and acquisition decisions}\label{tab:related}
+\begin{tabular}{p{24mm}p{38mm}p{42mm}p{44mm}}
+\toprule
+Procedure & Sampling target & Stopping or acquisition decision & Guarantee considered \\
+\midrule
+Ilyas et al.\ \cite{ilyas} & I.i.d. data-generating distribution & Cost-increment rule; empirical set size estimated from unlabeled inputs & Population coverage; asymptotic cost regret under a density-ratio condition \\
+Howard and Ramdas\ \cite{howard2022} & Population quantiles from an i.i.d. stream & Any stopping time supported by the confidence sequence & Time-uniform confidence intervals for quantiles/CDFs \\
+Waudby-Smith and Ramdas\ \cite{wor} & Fixed population sampled without replacement & User-selected stopping applied to a confidence sequence & Time-uniform confidence sets for finite-population parameters \\
+JRC & Corrected order statistic of a fixed finite reference pool & Endpoint set-size difference below a batch-specific tolerance & Reference-set containment for all inputs; average inflation control on the monitoring batch \\
+\botrule
+\end{tabular}
+\begin{minipage}{\textwidth}\footnotesize The rows describe different statistical contracts. This study does not infer superiority over an i.i.d. cost-optimality method from lower labeling cost under the finite-reference contract. The Ilyas comparison uses the supplied original-submission version, whose theoretical and stabilized experimental rules are distinguished\end{minipage}
+\end{table*}
+
+\subsection{Sequential finite-population inference}
+Finite-population sampling and hypergeometric inversion are standard statistical tools \cite{cochran}. Time-uniform confidence sequences \cite{howard2021}, sequential quantile estimation \cite{howard2022}, sampling-without-replacement confidence sequences \cite{wor}, and exact hypergeometric group-sequential tests \cite{jin} supply the closest foundations. The corrected conformal quantile and cumulative-probability scores are likewise established \cite{angelopoulos,romano}. JRC contributes a specialized joint rank-state calculation for a known finite horizon and reference rank. The experiments isolate the benefit of this calculation by applying the same reference pool, query order and set-inflation tolerance to established interval methods.
+
+\section{Finite-pool reference emulation}
+\label{sec:method}
+
+Figure~\ref{fig:1} shows the frozen-model and query workflow. Algorithm~\ref{alg:jrc} specifies the acquisition procedure.
+
+\begin{figure*}[t]\centering
+\makebox[\textwidth][c]{\includegraphics[width=174mm]{Fig1.pdf}}
+\caption{Overall architecture of JRC. A frozen classifier supplies the class-score matrices. Offline rank boundaries depend on the pool size, reference rank, confidence error and declared checkpoints. The query loop returns a threshold with reference-set containment and batch-specific inflation control}\label{fig:1}
+\end{figure*}
+
+\subsection{Target, information and cost}
+Let a trained classifier be fixed before calibration acquisition. For a nonconformity score $s(x,y)$, its thresholded prediction set is
+\begin{equation}
+ C(x;q)=\{y\in\mathcal Y:s(x,y)\le q\}.
+ \label{eq:sets}
+\end{equation}
+The label set $\mathcal Y$ is finite, with $K$ classes. We fix a reference pool $\mathcal P=\{x_i\}_{i=1}^N$ before requesting its labels. The unknown true-label scores $S_i=s(x_i,y_i)$ are regarded as fixed values. Define
+\begin{equation}
+ k=\lceil(N+1)(1-\alpha)\rceil,\qquad
+ q_{\rm ref}=S_{(k)},
+ \label{eq:reference}
+\end{equation}
+with $q_{\rm ref}=+\infty$ if $k>N$. The full-pool reference predictor is $C(x;q_{\rm ref})$. Our target is to emulate this predictor with fewer queried labels. The reference rank uses the familiar split-conformal correction, but dependence within a pool does not make the resulting predictor marginally valid. Reference containment and population coverage are different statements.
+
+We condition on all pool values, the trained classifier and a batch $\mathcal X_\star$ of $M$ unlabeled monitoring inputs. The only randomization in the guarantee is a uniform permutation of the $N$ pool indices, chosen independently of their unrevealed labels. Labels are revealed in this order. Correlation between people, repeated windows and trials can be arbitrary because the argument concerns sampling from a fixed population. A label-driven query ranking or replacing the pool after inspecting its labels would not satisfy this design.
+
+All class scores on $\mathcal X_\star$ are available without its true labels. They determine when a quantile interval is sufficiently precise for prediction-set utility. Using held-out inputs this way is a transductive protocol. Its set-size statement applies to this finite batch; it is not a guarantee of size control on a different deployment distribution. The containment statement below holds for every input on the confidence event.
+
+The primary cost is the number $T$ of queried window labels. When the pool involves $m$ participants and each has setup cost $c$, a conservative secondary effort model is $T+cm$, against the reference cost $N+cm$. Every participant's setup is charged to both policies, even if stopping occurs before that participant's first queried window. These are modeled effort units. Presegmentation, obtaining sensor recordings and constructing the reference pool are outside the label-query savings.
+
+
+\begin{algorithm*}[t]
+\caption{Joint rank calibration for a fixed reference pool}\label{alg:jrc}
+\begin{algorithmic}[1]
+\Require Frozen score function; fixed pool of $N$ windows; uniform query permutation; monitoring scores; $\alpha,\delta,\tau$; checkpoints $\mathcal T$
+\State Set $k=\lceil(N+1)(1-\alpha)\rceil$ and calibrate rank boundaries $(\ell_t,u_t)$ by the joint recursion
+\State Initialize observed scores $\mathcal S\gets\varnothing$, $L\gets-\infty$, $U\gets+\infty$
+\For{each checkpoint $t\in\mathcal T$}
+\State Query only the new labels needed to reach $t$ observations and add their true-label scores to $\mathcal S$
+\State Obtain the current rank bracket $(L_t,U_t)$ from the ordered observed scores
+\State Form $(L',U')\gets(\max\{L,L_t\},\min\{U,U_t\})$
+\If{$L'>U'$}
+\State Record an empty-intersection event and use $(L',U')\gets(L_t,U_t)$
+\EndIf
+\State Set $(L,U)\gets(L',U')$ and calculate $D_t$ from the monitoring scores using Eq.~\eqref{eq:width}
+\If{$D_t\le\tau$}
+\State \Return queried count $t$ and predictor $C(x;U)$
+\EndIf
+\EndFor
+\end{algorithmic}
+\end{algorithm*}
+
+\subsection{Finite-population rank brackets}
+Choose checkpoints $\mathcal T\subseteq\{1,\ldots,N\}$ with $N\in\mathcal T$. If scores tie, order the complete population by the pair $(S_i,i)$, using the fixed pool index to break ties. The numerical inequalities below remain valid when these pairs are projected onto their score values.
+
+Let $J_t$ count the queried items whose full-population ranks are strictly below $k$, and let $R_t$ indicate whether the item of rank $k$ has appeared. Then $J_t+R_t$ counts sampled items with rank at most $k$. Their separate marginal distributions are
+\begin{equation}
+ \begin{aligned}
+ J_t&\sim\operatorname{Hypergeom}(N,k-1,t),\\
+ J_t+R_t&\sim\operatorname{Hypergeom}(N,k,t).
+ \end{aligned}
+ \label{eq:hg}
+\end{equation}
+Write $Q_p(N,a,t)$ for the smallest integer whose hypergeometric cumulative probability is at least $p$. At a common tail parameter $\eta$, use sample-rank boundaries
+\begin{equation}
+ \ell_t=Q_\eta(N,k,t),\quad
+ u_t=Q_{1-\eta}(N,k-1,t)+1.
+ \label{eq:ranks}
+\end{equation}
+For the ordered observed scores $S^{[t]}_{(j)}$, set
+\begin{equation}
+ L_t=S^{[t]}_{(\ell_t)},\qquad U_t=S^{[t]}_{(u_t)}.
+ \label{eq:bracket}
+\end{equation}
+The conventions are $S^{[t]}_{(0)}=-\infty$ and $S^{[t]}_{(t+1)}=+\infty$. At the census, both bounds are the known $S_{(k)}$. When $k>N$, both are $+\infty$ and the reference already contains every label.
+
+On a path satisfying $J_t+R_t\ge\ell_t$ and $J_t<u_t$, at least $\ell_t$ observations have full rank at most $k$, while fewer than $u_t$ observations have rank below $k$. Consequently, $L_t\le q_{\rm ref}\le U_t$. A standard simultaneous-coverage construction uses $\eta=\delta/[2(|\mathcal T|-1)]$ and a union bound over the non-census checkpoints. Hypergeometric intervals themselves are established sampling tools; they are the first baseline here.
+
+\subsection{Joint calibration of the checkpoint boundaries}
+The union bound does not use the strong dependence between nearby checkpoints or between the two rank-count processes. We instead compute their joint crossing probability. Conditional on state $(J_t,R_t)=(j,r)$, the next observation has rank below $k$, equal to $k$, or above $k$, with probabilities
+\begin{equation}
+ \frac{k-1-j}{N-t},\qquad
+ \frac{1-r}{N-t},\qquad
+ \frac{N-k-t+j+r}{N-t},
+ \label{eq:transition}
+\end{equation}
+respectively. They lead to states $(j+1,r)$, $(j,1)$ and $(j,r)$. Impossible transitions have probability zero. Start with mass one at $(0,0)$; propagate these probabilities and absorb mass at any checkpoint for which
+\begin{equation}
+ j+r<\ell_t\quad\text{or}\quad j\ge u_t.
+ \label{eq:crossing}
+\end{equation}
+The absorbed mass $A(\eta)$ is the exact probability of at least one rank-boundary crossing under the finite query design. There are at most $2k$ states at each time. Direct propagation costs $O(Nk)$ operations and $O(k)$ working memory for a specified boundary family. It is performed before label queries and reused across pools with the same $N$, $k$, confidence level and checkpoints.
+
+Increasing $\eta$ weakens both tail protections, so $A(\eta)$ is nondecreasing, although discrete. We search this one-dimensional family by 24 bisection steps and retain a feasible value satisfying $A(\eta)\le\delta-10^{-10}$. The small numerical slack is implementation protection; the statistical claim concerns the exact recursion. Exact group-sequential calibration is established \cite{jin}; the contribution here is the coupled rank-state construction for preserving a finite calibration reference, together with the prediction-set stopping target.
+
+\subsection{Stopping in prediction-set space}
+Intersect valid past brackets by setting $\overline L_t=\max_{v\le t}L_v$ and $\overline U_t=\min_{v\le t}U_v$, where $v\in\mathcal T$. On the simultaneous coverage event this intersection contains $q_{\rm ref}$. An empty intersection signals that event has failed; the implementation records it and falls back to the current bracket. At the census it returns the exact quantile regardless of previous events.
+
+The stopping statistic is observable without monitoring labels:
+\begin{equation}
+ D_t=\frac1M\sum_{x\in\mathcal X_\star}
+ \bigl[|C(x;\overline U_t)|-|C(x;\overline L_t)|\bigr].
+ \label{eq:width}
+\end{equation}
+For a prespecified tolerance $\tau\ge0$, stop at the first checkpoint with $D_t\le\tau$ and return $C(x;\overline U_T)$. The census guarantees termination. The quantity $\tau$ is an absolute number of additional labels per input, not a normalized score width or coverage margin. An arbitrary numerical score tolerance would change meaning under a monotone reparameterization of the nonconformity score; this stopping statistic depends on actual prediction-set memberships.
+
+\textbf{Proposition 1 (reference preservation).}
+For a fixed classifier, finite reference pool, monitoring batch and declared checkpoints, suppose the joint recursion yields $A(\eta)\le\delta$. Under uniform sampling without replacement, with probability at least $1-\delta$, the returned predictor satisfies simultaneously
+\begin{equation}
+ C(x;q_{\rm ref})\subseteq C(x;\overline U_T),
+ \label{eq:containment}
+\end{equation}
+for every input $x$, and
+\begin{equation}
+ \frac1M\sum_{x\in\mathcal X_\star}
+ \bigl[|C(x;\overline U_T)|-|C(x;q_{\rm ref})|\bigr]
+ \le\tau.
+ \label{eq:inflation}
+\end{equation}
+No independence assumption on the fixed score values is required.
+
+\textit{Proof.} The recursion enumerates the law of the uniformly sampled rank path. Except on an event of probability $A(\eta)$, neither inequality in Eq.~\eqref{eq:crossing} holds at any checkpoint. The rank argument above gives $L_t\le q_{\rm ref}\le U_t$ simultaneously. Running intersections therefore contain $q_{\rm ref}$ and are nonempty. Since the sets in Eq.~\eqref{eq:sets} are nested in $q$, the upper endpoint gives Eq.~\eqref{eq:containment} for every input. The reference set lies between the sets at the lower and upper endpoints, so its extra-label difference is bounded pointwise by the summand in Eq.~\eqref{eq:width}. At the data-dependent stopping time, the average is at most $\tau$. The confidence event covers every checkpoint and hence also this stopping time.\hfill$\square$
+
+Containment implies that empirical coverage cannot decrease for any fixed labeled test collection on this event; each individual's positive coverage shortfall also cannot increase. It does not repair a poorly calibrated reference. The failure probability $\delta$ is attached to one label-query run. It is not automatically a familywise guarantee for thousands of experiment configurations or repeated future deployments.
+
+Strictly increasing score transformations preserve the rank ordering and every thresholded set membership, so they leave the query count and returned sets unchanged. This standard property of rank/set-based procedures is used as an implementation check.
+
+\subsection{Implementation and comparison methods}
+Sorted monitoring scores allow Eq.~\eqref{eq:width} to be computed using two binary searches. Each checkpoint sorts the observed label scores. This direct implementation is adequate for the pool sizes studied; dynamic order-statistic structures could reduce repeated sorting for larger pools. Precomputed boundary tables are separate from per-pool query execution.
+
+Both quantile-interval baselines satisfy the same finite-pool confidence constraint as JRC: conditional on the complete fixed pool, their intervals contain $q_{\rm ref}$ simultaneously at all declared checkpoints with probability at least $1-\delta$ over uniform sampling without replacement. The comparison uses the same upper-endpoint output and set-inflation stopping rule. Population coverage remains a separate property of the reference predictor.
+
+The second quantile-interval baseline inverts the prior/posterior-ratio confidence sequence of Waudby-Smith and Ramdas \cite{wor}. A uniform prior on the number of successes in the population induces the ordered-prefix mixture likelihood $B(j+1,t-j+1)$. For a hypothesized population count $a$, divide this mixture likelihood by
+\begin{equation}
+ \mathcal L_t(a,j)=
+ \frac{(a)_j\,(N-a)_{t-j}}{(N)_t},
+ \label{eq:likelihood}
+\end{equation}
+where $(a)_j$ denotes a falling factorial. Invert the resulting e-process separately at counts $k$ and $k-1$, allotting each error $\delta/2$. The minimum accepted count at $k$ gives the lower sample rank; one plus the maximum accepted count at $k-1$ gives the upper rank. We use the same running intersection, checkpoints and prediction-set stopping tolerance as the proposed engine. This is an implementation of an established confidence-sequence principle, not a separate new method.
+
+We additionally compare ordinary conformal quantiles from fixed 25\%, 50\% and 75\% prefixes, and an upper hypergeometric bound at a single fixed 50\% look. The former have no reference-containment guarantee. The latter protects the reference at that fixed look but does not adapt label expenditure to a prescribed set-size tolerance. Diagnostic ablations omit time correction, omit running intersection, return a midpoint at the proposed stopping time, or use sparse checkpoints. Their different guarantees are kept explicit.
+\section{Experimental design}
+\label{sec:experiments}
+\subsection{Data and development history}
+The six development/reanalysis datasets are UCI HAR \cite{har}, DSADS \cite{dsads}, MHEALTH \cite{mhealth}, WISDM \cite{wisdm}, PAMAP2 \cite{pamap} and REALDISP \cite{realdisp}. They contain 122 eligible subject identifiers and 54,482 retained windows. These benchmarks were examined during earlier acquisition-policy development, including unsuccessful historical-risk and randomized-allocation candidates. In particular, PAMAP2 and REALDISP were confirmation datasets for an earlier locked rule, whose frequent tolerance-transfer failures motivated the present change of target. They are not described as independent confirmation of the current method. Online Resource 1 preserves the earlier protocol and its aggregate negative results.
+
+USC-HAD \cite{uschad} is the additional prospective confirmation benchmark. The method, confidence level, primary tolerance, query schedule, preprocessing and splits were locally locked on 12 September 2026 before any of its model predictions were available. This is a timestamped local lock, not an externally preregistered study. All 14 participants meet the requirement of at least 120 retained windows. The resulting confirmation array contains 5,353 windows and 12 classes. The complete seven-dataset evaluation therefore uses 136 subject identifiers and 59,835 windows. Totals refer to dataset-specific participant identifiers.
+
+The selected input is three acceleration axes resampled to 128 time points. UCI HAR uses the release's 2.56-second total-acceleration windows, retaining alternating windows per subject; its release ordering is not verified raw chronology. DSADS uses five-second torso-acceleration segments. MHEALTH uses five-second chest windows; WISDM uses five-second smartphone-acceleration windows from its 18-activity release. PAMAP2 uses protocol chest acceleration, and REALDISP uses ideal-placement BACK acceleration. The original REALDISP manual places BACK third in the log, unlike the fifth position listed in the repository webpage summary; we follow the original manual. The retained sample counts and preprocessing provenance are included in Table~\ref{tab:data} and the supplement. Different window durations in the original HAR release prevent interpreting the seven datasets as identical sensor protocols.
+
+For USC-HAD, each original MAT trial remains separate. We take nonoverlapping 500-sample windows at the documented 100 Hz, retain acceleration columns 1--3, reject nonfinite windows and incomplete tails, and use anti-aliased polyphase resampling to 128 points. Dataset-provided trial segmentation is treated as available; our label-cost model does not charge or solve raw-stream segmentation. The filename convention supplies activity IDs. An independent schema audit finds one conflict: Subject14/a3t2.mat is activity 3 by filename but activity 2 (walking-left) in its internal metadata. Main labels follow the locked filename rule. A separate sensitivity excludes that trial, refitting classifiers whenever it occurs in training. Another file lacks the optional numeric activity field but has a matching activity-name string; it is retained. No exact duplicate signal arrays are found among the 840 trials. These qualifications are reported rather than silently correcting uncertain labels.
+
+
+\begin{table*}[t]
+\centering\small\setlength{\tabcolsep}{3pt}
+\caption{Public datasets and retained samples}\label{tab:data}
+\begin{tabular}{lrrrlr}
+\toprule
+Dataset & People & Windows & Classes & Selected signal & Seconds \\
+\midrule
+UCI HAR & 30 & 5,155 & 6 & Waist total acceleration & 2.56 \\
+DSADS & 8 & 9,120 & 19 & Torso acceleration & 5 \\
+MHEALTH & 10 & 1,335 & 12 & Chest acceleration & 5 \\
+WISDM & 51 & 32,653 & 18 & Phone acceleration & 5 \\
+PAMAP2 & 8 & 3,775 & 12 & Chest acceleration & 5 \\
+REALDISP & 15 & 2,444 & 33 & BACK acceleration & 5 \\
+USC-HAD & 14 & 5,353 & 12 & Front right hip acceleration & 5 \\
+\botrule
+\end{tabular}
+\begin{minipage}{\textwidth}\footnotesize The first six datasets are development/reanalysis; USC-HAD is the locked confirmation benchmark. All signals have three axes and are resampled to 128 points. Eligibility requires at least 120 windows per participant. Sample counts refer to the fixed main preprocessing, before the separate USC-HAD schema sensitivity.\end{minipage}
+\end{table*}
+
+\subsection{Frozen classifiers and subject partitions}
+Every acquisition method uses identical probability vectors within a classifier case. Logistic regression (LR) uses 35 standardized statistical features, regularization $C=1$ and a maximum of 2,000 iterations. MiniRocket (MR) uses 2,016 kernels followed by a standardized logistic-regression head. The InceptionTime-style model (IT) uses six modules, 32 filters per branch, kernel lengths 39, 19 and 9, residual connections every third module, global pooling and a classification head. It is trained for 40 epochs with Adam, learning rate $10^{-3}$ and batches of 128, without a test-selected checkpoint. The statistical features, normalization and model code are shared with the preceding frozen model study. Scikit-learn and SciPy support the classical pipeline \cite{sklearn,scipy}.
+
+We reuse 249 cases from 83 outer partitions on the six development datasets. Each case has disjoint training, calibration and test participants. The earlier study trained auxiliary out-of-fold models, but this method does not require their predictions or their fit cost. USC-HAD has five fixed random seeds and seven test folds per seed: two test participants, eight training participants and four calibration participants in each fold. This gives 35 partitions and 105 new final-classifier fits. The 354 model cases reuse the 83 development and 35 confirmation partitions; repeated results are aggregated within participants.
+
+LAC uses $s(x,y)=1-\widehat p_y(x)$. The secondary score is deterministic inclusive APS: sort class probabilities in descending order, with stable class-index ties, and assign each class its cumulative probability. There is no randomization within the APS score and no forced top-label insertion. Empty and full sets remain in the calculations. The same scoring convention is used for the reference and every acquisition comparator, and $\alpha=0.1$ throughout.
+
+\subsection{Reference pools and query experiments}
+For a requested pool ceiling $B\in\{120,240,480,960\}$ and $m$ available calibration participants, the actual pool size is $N=\min(B,120m)$. All participants contribute quotas that differ by at most one; a random participant ordering assigns any remainder. We sample each participant's quota uniformly without using its labels, then independently randomize the order of the selected pool. Some ceilings thus produce the same actual pool size; we retain all declared ceilings and disclose this saturation rather than treating the requested ceiling as the number of labels acquired.
+
+The primary parameters are confidence error $\delta=0.05$, additional-label tolerance $\tau=0.5$ and checkpoints every 20 queried labels plus the census. A tolerance of 0.5 limits the mean increase in candidate labels on the monitoring batch; it is neither a 0.5\% coverage margin nor a cap of one extra label for every individual input. The secondary tolerances are 0.1, 0.25 and 1.0, reported together. Forty paired pool/query randomizations per case and ceiling reduce Monte Carlo variability. Seeds, participants and windows are shared by the comparator evaluations. Simulators retain full labels to calculate the reference, but decisions use only prefixes; a separate oracle-based implementation verifies that execution stops without requesting any later label.
+
+The complete test-input batch supplies the monitoring scores, with labels hidden. The principal size measure used by the stopping rule is window-weighted on that batch. Subject-level empirical coverage and size are also reported with equal weight per subject. These two weightings are deliberately distinguished: a finite-batch guarantee on the former is not automatically an individual-subject size bound. The universal containment event does protect every subject's reference coverage simultaneously.
+
+\subsection{Metrics, uncertainty and ablations}
+Primary outcomes are queried-label savings $1-T/N$, reference-set containment failure and batch size inflation. We report each outcome without combining them into a favorable aggregate score. A containment failure is the conservative scalar event $\overline U_T<q_{\rm ref}$; with ties or gaps in candidate scores, this can flag a threshold failure even when no observed test set loses a label. Bracket failure checks both endpoints. Size failure checks whether actual mean extra labels on the monitoring batch exceed $\tau$. Each query campaign is counted once, regardless of the number of held-out people.
+
+For a test participant with empirical coverage $c_u$, positive shortfall is $(0.9-c_u)_+$. The positive part is calculated before averaging randomizations. Accuracy and macro-F1 describe the frozen point classifiers; they are not objectives optimized by acquisition. Subject means average over paired randomizations and repeated partitions before aggregation. We compute paired 95\% bootstrap intervals by resampling participant summaries within a dataset, conditional on the fixed model runs. These intervals describe participant heterogeneity in this benchmark; shared training sets and few dataset domains limit broader inferential claims. We do not treat repeated windows, query draws or model fits as additional independent people.
+
+JRC, Bonferroni HG and the prior/posterior confidence sequence use identical tolerances and query checkpoints. Ablations remove the running intersection, use a sparse checkpoint grid, omit repeated-look correction, or substitute a midpoint output at the proposed stopping time. The latter two lack the stated guarantee. Fixed fractions and a one-look upper bound are reported as additional cost/utility operating points, not as methods that satisfy the same stopping contract. Exploratory sensitivities vary $\delta$ and monitor on even-indexed inputs while evaluating size on odd-indexed inputs in the first MR case of each development dataset. The latter probes a limitation of the batch-specific statement and is not used to extend it to unseen distributions.
+
+All runs use an Intel Core i9-12900HX CPU and an RTX 4070 Laptop GPU with 8 GB memory for neural training. We measure boundary-table construction separately from online acquisition calculations. Neither these timings nor modeled participant setup costs are measurements of wearable-device energy or human annotation duration. Exhaustive small-population enumeration checks both rank engines and the coupled recursion; additional checks cover ties, census behavior, oracle access and strictly monotone score transformations.
+
+
+
+\section{Results}
+\subsection{Label savings against sequential quantile baselines}
+Table~\ref{tab:primary} reports absolute reference utility and label savings for the three interval methods. Figure~\ref{fig:2} adds the secondary APS score. All engines use the same confidence error, tolerance, pool and query order. The comparison therefore concerns how their bounds support the declared stopping contract, rather than a comparison between unrelated labeling budgets.
+
+\begin{table*}[t]
+\centering\small\setlength{\tabcolsep}{3pt}
+\caption{Primary LAC results at confidence error 0.05 and tolerance 0.5}\label{tab:primary}
+\begin{tabular}{lrrrrrr}
+\toprule
+Dataset & Ref. cov. (\%) & Ref. size & Joint saved (\%) & HG saved (\%) & CS saved (\%) & Joint extra size \\
+\midrule
+UCI HAR & 90.45 & 1.035 & 71.62 & 64.93 & 58.97 & 0.235 \\
+DSADS & 88.69 & 5.015 & 4.19 & 2.71 & 1.10 & 0.073 \\
+MHEALTH & 89.07 & 1.459 & 45.17 & 38.25 & 30.92 & 0.206 \\
+WISDM & 89.92 & 8.996 & 6.59 & 4.35 & 2.49 & 0.122 \\
+PAMAP2 & 87.14 & 2.933 & 16.20 & 12.02 & 6.77 & 0.151 \\
+REALDISP & 89.80 & 2.377 & 18.56 & 13.77 & 8.82 & 0.163 \\
+USC-HAD & 90.36 & 2.590 & 23.67 & 17.91 & 11.74 & 0.179 \\
+\botrule
+\end{tabular}
+\begin{minipage}{\textwidth}\footnotesize HG: Bonferroni hypergeometric brackets. CS: prior/posterior-ratio rank confidence sequence. Coverage and set size give equal weight to participant summaries. Extra size is relative to the full reference. The stopping guarantee instead concerns the window-weighted monitoring batch; individual-participant size bounds are not asserted.\end{minipage}
+\end{table*}
+
+\begin{figure*}[t]\centering
+\makebox[\textwidth][c]{\includegraphics[width=174mm]{Fig2.pdf}}
+\caption{Label savings at confidence error 0.05 and tolerance 0.5: (a) LAC; (b) APS. Solid, hatched and cross-hatched bars identify JRC, Bonferroni hypergeometric brackets and the primary uniform-prior confidence sequence. Values average the declared pool ceilings and participant summaries}\label{fig:2}
+\end{figure*}
+On USC-HAD, the joint engine saves 23.67\% of reference labels, compared with 17.91\% for HG and 11.74\% for the prior/posterior CS. Its mean coverage is 91.80\%, against 90.36\% for the reference, and mean set size changes from 2.590 to 2.769. The coverage increase comes from the more inclusive calibration threshold; the point classifiers are unchanged.
+
+The six development datasets show a substantial range. Joint-engine savings are 71.62\% on HAR and 45.17\% on MHEALTH, but only 4.19\% on DSADS and 6.59\% on WISDM. PAMAP2 and REALDISP lie between these extremes. Large absolute savings are therefore not a universal property of certified stopping. Broad reference sets and score distributions with many decision changes near the reference quantile can make the tolerance costly to certify.
+\subsection{Reference preservation and absolute utility}
+Table~\ref{tab:confirm} and Fig.~\ref{fig:3} compare fixed-fraction reductions with the quantile-interval baselines. Fixed fractions provide substantial label savings by construction, but their ordinary prefix quantiles need not contain the full-reference sets. A midpoint at a certified stopping time similarly discards the reason that upper-endpoint containment holds. The one-look upper bound protects the reference at its predetermined sample size but has no adaptive 0.5-label size-inflation contract.
+
+\begin{table*}[t]
+\centering\small\setlength{\tabcolsep}{3pt}
+\caption{USC-HAD primary results and run-level failures}\label{tab:confirm}
+\begin{tabular}{lrrrrr}
+\toprule
+Policy & Saved (\%) & Coverage (\%) & Set size & Threshold fail (\%) & Size fail (\%) \\
+\midrule
+Full reference & 0.00 & 90.36 & 2.590 & 0.00 & 0.00 \\
+Joint rank engine & 23.67 & 91.80 & 2.769 & 2.04 & 0.72 \\
+Bonferroni HG & 17.91 & 91.86 & 2.774 & 0.45 & 0.21 \\
+Prior/posterior CS & 11.74 & 91.76 & 2.761 & 0.02 & 0.05 \\
+Fixed 25\% & 75.00 & 90.46 & 2.713 & 42.26 & 15.03 \\
+Fixed 50\% & 50.00 & 90.41 & 2.632 & 41.42 & 6.09 \\
+Fixed 75\% & 25.00 & 90.36 & 2.601 & 39.83 & 2.20 \\
+One-look upper 50\% & 50.00 & 93.83 & 3.356 & 1.73 & 46.64 \\
+Midpoint output & 23.67 & 90.04 & 2.562 & 46.40 & 0.14 \\
+No time correction & 33.71 & 91.73 & 2.766 & 6.29 & 3.02 \\
+\botrule
+\end{tabular}
+\begin{minipage}{\textwidth}\footnotesize Threshold failure is upper output threshold below the complete-reference threshold. Size failure is monitoring-batch inflation above 0.5 labels. Rates average paired query campaigns, not duplicated test-person records; they are not simultaneous-error bounds over the whole experiment. Fixed fractions, midpoint output and the uncorrected rule do not have the proposed joint contract.\end{minipage}
+\end{table*}
+
+\begin{figure*}[t]\centering
+\makebox[\textwidth][c]{\includegraphics[width=174mm]{Fig3.pdf}}
+\caption{USC-HAD LAC failure diagnostics: (a) output threshold below the full-reference threshold; (b) monitoring-batch inflation above 0.5 labels. The horizontal line marks 5\%. Fixed fractions, midpoint output (Mid) and uncorrected repeated looks (Uncorr.) do not have the JRC contract}\label{fig:3}
+\end{figure*}
+The proposed confirmation threshold-failure rate is 2.04\%, and its batch size-failure rate is 0.72\%. The confidence statement applies to one query campaign. A failure of the scalar threshold bracket may not remove any label on the finite observed input batch if no candidate score lies in the gap.
+
+The reference itself must remain useful. On the development sets, some references do not achieve nominal 90\% coverage despite disjoint participant roles, and WISDM returns many candidate activities. The policy preserves these reference sets rather than solving their recognition or calibration deficiencies.
+\subsection{Paired improvements and classifier dependence}
+Figure~\ref{fig:4} reports paired participant bootstrap intervals for additional savings against the quantile-interval baselines. These intervals condition on the fitted models and split collection. Table~\ref{tab:models} separates point-classification performance from acquisition outcomes for each confirmation backbone. The acquisition policy does not retrain or select among these classifiers.
+
+\begin{figure*}[t]\centering
+\makebox[\textwidth][c]{\includegraphics[width=174mm]{Fig4.pdf}}
+\caption{Additional LAC label savings of JRC relative to (a) Bonferroni hypergeometric brackets and (b) the primary uniform-prior confidence sequence. Points are paired participant means; bars are 95\% bootstrap intervals conditional on the fitted models and partitions}\label{fig:4}
+\end{figure*}
+
+\begin{table*}[t]
+\centering\small\setlength{\tabcolsep}{3pt}
+\caption{USC-HAD point-classifier and acquisition results}\label{tab:models}
+\begin{tabular}{lrrrrr}
+\toprule
+Classifier & Accuracy (\%) & Macro-F1 (\%) & Labels saved (\%) & Set coverage (\%) & Set size \\
+\midrule
+LR & 60.17 & 56.14 & 32.85 & 92.76 & 2.769 \\
+MR & 68.04 & 65.40 & 23.31 & 92.82 & 2.573 \\
+IT & 65.14 & 60.32 & 14.85 & 89.83 & 2.967 \\
+\botrule
+\end{tabular}
+\begin{minipage}{\textwidth}\footnotesize Each classifier has 35 main outer partitions. IT denotes one InceptionTime-style network; it is not a five-network ensemble. Macro-F1 includes all 12 classes, with zero contribution for absent/undefined class precision-recall terms according to the supplied implementation.\end{minipage}
+\end{table*}
+\subsection{Tolerance, query checkpoints and mechanism ablations}
+Figure~\ref{fig:5} reports all four declared tolerances. Relaxing the allowed average number of additional labels permits earlier stopping, as expected from Eq.~\eqref{eq:width}. The tolerance controls the permitted added ambiguity and the resulting cost-utility trade-off. The primary tolerance remains 0.5 on confirmation; it was not selected by maximizing the confirmation savings.
+
+\begin{figure*}[t]\centering
+\makebox[\textwidth][c]{\includegraphics[width=174mm]{Fig5.pdf}}
+\caption{Tolerance-savings curves for JRC: (a) LAC; (b) APS. Distinct markers and line styles identify the datasets. All four tolerances were declared before USC-HAD results. Values are means; primary-tolerance paired uncertainty is reported in Fig.~\ref{fig:4}}\label{fig:5}
+\end{figure*}
+Table~\ref{tab:ablate} separates the mechanism choices. Removing running intersections reduces confirmation savings from 23.67\% to 21.10\%; sparse checkpoints reduce them to 16.84\%. Returning the midpoint retains the same label count but raises threshold failure to 46.40\%, illustrating why the protected upper endpoint is essential. Omitting repeated-look correction increases savings to 33.71\% and threshold failure to 6.29\%, above the declared 5\% error level.
+
+\begin{table*}[t]
+\centering\small\setlength{\tabcolsep}{3pt}
+\caption{USC-HAD mechanism ablations}\label{tab:ablate}
+\begin{tabular}{lrrrr}
+\toprule
+Rule & Saved (\%) & Extra size & Threshold fail (\%) & Size fail (\%) \\
+\midrule
+Joint rank engine & 23.67 & 0.179 & 2.04 & 0.72 \\
+No intersection & 21.10 & 0.178 & 0.67 & 0.06 \\
+Sparse checkpoints & 16.84 & 0.079 & 1.77 & 0.36 \\
+Midpoint output & 23.67 & -0.028 & 46.40 & 0.14 \\
+No time correction & 33.71 & 0.175 & 6.29 & 3.02 \\
+\botrule
+\end{tabular}
+\begin{minipage}{\textwidth}\footnotesize Only the first three rows retain the declared guarantee with their respective brackets/checkpoints. The midpoint has the same stopping labels as the joint engine but a different output rule. The uncorrected rule reuses fixed-time intervals at multiple looks.\end{minipage}
+\end{table*}
+Figure~\ref{fig:6} traces the first declared USC-HAD MR query campaign at a 480-window pool. This case is selected by its fixed index, not by searching for the largest gain. The census collapses all valid constructions to the same full-reference quantile. Before that point, the mapping from rank uncertainty to set membership determines when each engine meets the tolerance.
+
+\begin{figure*}[t]\centering
+\makebox[\textwidth][c]{\includegraphics[width=174mm]{Fig6.pdf}}
+\caption{First declared USC-HAD MR query run, LAC, 480 reference windows: (a) upper quantile endpoints represented as the corresponding probability cutoff $1-U_t$ on a logarithmic axis; (b) endpoint set-size difference with stopping locations marked. The reference quantile is approximately 0.999436. Zero cutoffs and infinite upper bounds are displayed at $10^{-16}$ in (a); this is only a display convention. The horizontal line in (b) is the 0.5-label tolerance}\label{fig:6}
+\end{figure*}
+Figure~\ref{fig:7} relates label savings to absolute reference set size and shows the corresponding reference/returned coverage pairs.
+
+\begin{figure*}[t]\centering
+\makebox[\textwidth][c]{\includegraphics[width=174mm]{Fig7.pdf}}
+\caption{Reference utility and acquisition behavior for LAC: (a) label savings versus full-reference set size; (b) returned-set versus reference coverage. Each point represents one dataset-classifier mean; dataset identity is encoded by both marker shape and color. Each dataset contributes LR, MR and IT points, whose identities and values are supplied in the model-summary table of Online Resource 1. The diagonal indicates equal coverage}\label{fig:7}
+\end{figure*}
+
+\subsection{Sensitivity to stronger confidence-sequence priors}
+The primary confidence-sequence baseline uses a uniform prior on the finite-population success count. After reviewing the nearest label-efficient stopping literature, we tested four fixed beta-binomial prior choices across all 354 existing classifier cases. A Beta$(a,b)$ mixture replaces the ordered-prefix mixture likelihood by $B(j+a,t-j+b)/B(a,b)$ while retaining the same likelihood-ratio construction and error allocation. Exact rank-path checks verify the error bound for each finite design used. The diagnostic reuses the main models and queries after confirmation; the locked JRC rule is unchanged.
+
+Table~\ref{tab:priors} reports all four prior choices. Tail-centered priors improve the baseline, showing that the uniform-prior comparison alone understates the performance of this method family. On USC-HAD, the strongest of the tested alternatives saves 15.33\% of labels, compared with 11.74\% for the primary uniform prior and 23.67\% for JRC. JRC retains the largest dataset-average savings among these choices on all seven datasets. The comparison covers the four specified priors and the declared benchmark designs. Reconstructing JRC and the uniform-prior results reproduces the frozen dataset averages within $10^{-12}$.
+
+
+
+\subsection{Schema exclusion and computation}
+The exclusion sensitivity removes the USC-HAD trial with conflicting activity identifiers from every data role. The original classifier is reused only when that trial was absent from its training set; otherwise it is refitted. Joint-engine label savings change from 23.67\% to 22.70\%, coverage from 91.80\% to 92.30\%, and mean set size from 2.769 to 2.814. This check measures sensitivity to the ambiguity; it does not establish which of the conflicting original labels is correct. The locked main data and outcomes remain intact.
+
+Boundary tables depend only on the finite design and can be reused. Table~\ref{tab:runtime} separates table construction from execution with a cached table. Timings exclude JIT compilation, model inference and human labeling. The online benchmark uses a fixed synthetic score array and 1,000 unlabeled inputs with 12 candidate classes to isolate computation; this benchmark isolates computation from recognition quality.
+
+
+\clearpage\onecolumn\twocolumn[{
+\begin{minipage}{\textwidth}
+\begin{minipage}{\textwidth}
+\centering\small\setlength{\tabcolsep}{5pt}
+\reviewtablecaption{Post-confirmation prior sensitivity: percentage of reference labels saved}\label{tab:priors}
+\begin{tabular}{lrrrrr}
+\toprule
+Dataset & JRC & CS$(1,1)$ & CS$(0.5,0.5)$ & CS$(1.8,0.2)$ & CS$(9,1)$ \\
+\midrule
+UCI HAR & 71.62 & 58.97 & 60.85 & 66.89 & 64.84 \\
+DSADS & 4.19 & 1.10 & 1.12 & 2.09 & 1.82 \\
+MHEALTH & 45.17 & 30.92 & 32.06 & 36.58 & 36.51 \\
+WISDM & 6.59 & 2.49 & 2.53 & 3.02 & 3.34 \\
+PAMAP2 & 16.20 & 6.77 & 6.95 & 9.24 & 9.20 \\
+REALDISP & 18.56 & 8.82 & 9.16 & 10.86 & 11.73 \\
+USC-HAD & 23.67 & 11.74 & 12.01 & 14.22 & 15.33 \\
+\botrule
+\end{tabular}
+\begin{minipage}{\textwidth}\footnotesize LAC, confidence error 0.05, tolerance 0.5 and the original paired query orders. CS$(a,b)$ uses a Beta$(a,b)$ mixing distribution. Values give equal weight to participant summaries. The choices are all reported, and the diagnostic is explicitly subsequent to the main confirmation\end{minipage}
+\end{minipage}
+\par\vspace{16pt}\noindent
+\begin{minipage}{\textwidth}
+\centering\small\setlength{\tabcolsep}{3pt}
+\reviewtablecaption{Boundary construction and cached acquisition computation}\label{tab:runtime}
+\begin{tabular}{lrrr}
+\toprule
+Pool size & Build table (ms) & Cached query loop (ms) & Exact crossing probability \\
+\midrule
+120 & 8.31 & 0.18 & 0.04843 \\
+240 & 25.07 & 0.26 & 0.04606 \\
+480 & 53.80 & 0.50 & 0.04991 \\
+960 & 153.41 & 0.45 & 0.04981 \\
+\botrule
+\end{tabular}
+\begin{minipage}{\textwidth}\footnotesize Five repeated timings per size on the stated CPU. All confidence errors are 0.05. Boundary construction is a one-time cost for each distinct pool/checkpoint design; query execution includes sorting monitoring scores and observed prefixes.\end{minipage}
+\end{minipage}
+\par\vspace{16pt}\end{minipage}
+}]
+\section{Discussion and limitations}
+Joint rank calibration reduces the conservatism caused by protecting each query checkpoint separately. Its empirical benefit is largest when the reference quantile can be localized without adding many candidate labels. The stronger-prior diagnostic shows that part of the original gap to the confidence-sequence baseline can be recovered by changing its prior; JRC retains an advantage across the tested dataset averages. The resulting method connects a calibrated finite-pool error budget to an interpretable set-inflation tolerance.
+
+The practical interpretation depends on the reference and the annotation workflow. Broad or poorly calibrated reference sets remain a limitation even if their inclusion is certified. Uniformly scattered label queries may also cost more to annotate than contiguous records. The model $T+cm$ accounts for participant setup but does not measure annotation duration, context switches or segmentation effort. Adapting the rank law to clustered or nonuniform queries would be needed to cover these workflows.
+
+The containment event protects every input's reference set, whereas the size-inflation tolerance is an average over one declared, unlabeled monitoring batch. It does not impose an individual-subject or future-batch size bound. The confidence-level and even/odd monitoring sensitivities in Online Resource 1 probe these limits without changing the main stopping rule.
+
+The benchmark spans seven datasets, but only USC-HAD was reserved for the current method before its predictive results were inspected. The stronger-prior and ambiguous-label checks are subsequent diagnostics. Repeated fits and query draws characterize this benchmark; they do not substitute for additional independent deployment domains. Practical annotation studies and further independently specified datasets would strengthen the application evidence.
+
+\section{Conclusion}
+Finite-pool reference emulation offers a concrete target for reducing calibration-label acquisition under dependent wearable measurements. Joint calibration of the sampled rank path yields confidence brackets that support a label-free stopping decision based on actual prediction-set changes. On the confidence event, the output preserves every reference set and respects the allowed average ambiguity on the monitoring batch. The seven-dataset experiment compares this specialization with established interval methods and simple cost cuts, while retaining weak-reference and low-savings cases. These findings support using JRC with a fixed reference pool and the declared query design, while identifying conditions in which little label reduction can be expected.
+
+
+\backmatter
+\section*{Data and supporting materials}
+\subsection*{Data availability}
+The original datasets are available from the sources cited in this article. Code and documentation are available at \url{https://github.com/Cyrano666/har-calibration-diversity}. Online Resource 1 provides frozen classifier probabilities, result tables, protocol locks and verification records. Raw USC-HAD recordings are obtained from their original provider. The archive index maps the manuscript figures and tables to their source files and distinguishes the locked main experiment from subsequent diagnostics.
+\subsection*{Supplementary material}
+Online Resource 1: reproduction code, frozen predictions and evaluation tables, protocol and verification records, the stronger-prior diagnostic, and figure sources. The archive index maps each figure and table to its source files.
+
+
+\begin{thebibliography}{99}\fontsize{9}{11}\selectfont\setlength{\itemsep}{4pt}
+\bibitem{guo} Guo C, Pleiss G, Sun Y, Weinberger KQ (2017) On calibration of modern neural networks. Proceedings of Machine Learning Research 70:1321-1330. \url{https://proceedings.mlr.press/v70/guo17a.html}
+
+\bibitem{ovadia} Ovadia Y, Fertig E, Ren J, Nado Z, Sculley D, Nowozin S, Dillon J, Lakshminarayanan B, Snoek J (2019) Can you trust your model's uncertainty? Evaluating predictive uncertainty under dataset shift. Advances in Neural Information Processing Systems 32. \url{https://proceedings.neurips.cc/paper/2019/hash/8558cb408c1d76621371888657d2eb1d-Abstract.html}
+
+\bibitem{vovk} Vovk V, Gammerman A, Shafer G (2005) Algorithmic learning in a random world. Springer, New York. \url{https://doi.org/10.1007/b106715}
+
+\bibitem{angelopoulos} Angelopoulos AN, Bates S (2023) Conformal prediction A gentle introduction. Foundations and Trends in Machine Learning 16(4):494-591. \url{https://doi.org/10.1561/2200000101}
+
+\bibitem{dunn} Dunn R, Wasserman L, Ramdas A (2023) Distribution-free prediction sets for two-layer hierarchical models. Journal of the American Statistical Association 118(544):2491-2502. \url{https://doi.org/10.1080/01621459.2022.2060112}
+
+\bibitem{barber} Barber RF, Candes EJ, Ramdas A, Tibshirani RJ (2023) Conformal prediction beyond exchangeability. Annals of Statistics 51(2):816-845. \url{https://doi.org/10.1214/23-AOS2276}
+
+\bibitem{ilyas} Ilyas A, Ko J, Tang J, Wu S, Zhang J (2026) Provably label-efficient conformal prediction. International Conference on Machine Learning. \url{https://icml.cc/virtual/2026/poster/65796}
+
+\bibitem{howard2021} Howard SR, Ramdas A, McAuliffe J, Sekhon J (2021) Time-uniform, nonparametric, nonasymptotic confidence sequences. Annals of Statistics 49(2):1055--1080. \url{https://doi.org/10.1214/20-AOS1991}
+
+\bibitem{howard2022} Howard SR, Ramdas A (2022) Sequential estimation of quantiles with applications to A/B testing and best-arm identification. Bernoulli 28(3):1704--1728. \url{https://doi.org/10.3150/21-BEJ1388}
+
+\bibitem{wor} Waudby-Smith I, Ramdas A (2020) Confidence sequences for sampling without replacement. Advances in Neural Information Processing Systems 33. \url{https://proceedings.neurips.cc/paper_files/paper/2020/file/e96c7de8f6390b1e6c71556e4e0a4959-Paper.pdf}
+
+\bibitem{stfal} Huan R, Zhou Y, Dong G, Chen P, Liang R, Chen C (2026) STF-AL: spatiotemporal-frequency feature representation and adversarial learning for sensor-based cross-domain human activity recognition. Pattern Analysis and Applications 29:173. \url{https://doi.org/10.1007/s10044-026-01750-8}
+
+\bibitem{ccthar} Zhou X, Yuan J, Liu C, Chen Q (2026) CCT-HAR: Cross-modal contrastive sample mining with temporal alignment for self-supervised human action recognition. Pattern Analysis and Applications 29:44. \url{https://doi.org/10.1007/s10044-026-01628-9}
+
+\bibitem{tsdfsa} Zhang G, Dai G, Liu Z, Shi J, Lin Y (2025) TSDFSA: a two-stage dynamic feature selection method based on attention mechanism for multi-sensor data. Pattern Analysis and Applications 28:172. \url{https://doi.org/10.1007/s10044-025-01550-6}
+
+\bibitem{roy} Roy D, Girdzijauskas S, Socolovschi S (2021) Confidence-calibrated human activity recognition. Sensors 21(19):6566. \url{https://doi.org/10.3390/s21196566}
+
+\bibitem{hduq} Lamaakal I, Yahyati C, Maleh Y, El Makkaoui K, Ouahbi I (2026) Efficient uncertainty aware human activity recognition on microcontrollers using hyperdimensional computing and conformal prediction. Scientific Reports 16:26262. \url{https://doi.org/10.1038/s41598-026-57375-8}
+
+\bibitem{minirocket} Dempster A, Schmidt DF, Webb GI (2021) MiniRocket A very fast almost deterministic transform for time series classification. Proceedings of KDD, pp 248-257. \url{https://doi.org/10.1145/3447548.3467231}
+
+\bibitem{inception} Ismail Fawaz H, Lucas B, Forestier G, Pelletier C, Schmidt DF, Weber J, Webb GI, Idoumghar L, Muller PA, Petitjean F (2020) InceptionTime: Finding AlexNet for time series classification. Data Mining and Knowledge Discovery 34:1936-1962. \url{https://doi.org/10.1007/s10618-020-00710-y}
+
+\bibitem{vovk2012} Vovk V (2012) Conditional validity of inductive conformal predictors. Proceedings of Machine Learning Research 25:475--490. \url{https://proceedings.mlr.press/v25/vovk12.html}
+
+\bibitem{liangstop} Liang Z, Zhou Y, Sesia M (2023) Conformal inference is (almost) free for neural networks trained with early stopping. Proceedings of Machine Learning Research 202:20810--20851. \url{https://proceedings.mlr.press/v202/liang23i.html}
+
+\bibitem{active2024} Xu Z, Karampatziakis N, Mineiro P (2024) Active, anytime-valid risk controlling prediction sets. Advances in Neural Information Processing Systems 37:60110--60132. \url{https://doi.org/10.52202/079017-1920}
+
+
+
+\bibitem{cochran} Cochran WG (1977) Sampling techniques, 3rd edn. Wiley, New York. \url{https://www.wiley-vch.de/en/areas-interest/mathematics-statistics/sampling-techniques-978-0-471-16240-7}
+
+\bibitem{jin} Jin M, Kepner JL (2017) On sample size calculation for exact group sequential tests for rare disease. International Journal of Clinical Biostatistics and Biometrics 3:013. \url{https://doi.org/10.23937/2469-5831/1510013}
+
+\bibitem{romano} Romano Y, Sesia M, Candes EJ (2020) Classification with valid and adaptive coverage. Advances in Neural Information Processing Systems 33:3581-3591. \url{https://proceedings.neurips.cc/paper/2020/hash/244edd7e85dc81602b7615cd705545f5-Abstract.html}
+
+\bibitem{har} Reyes-Ortiz J, Anguita D (2013) Human activity recognition using smartphones. UCI Machine Learning Repository. Dataset. CC BY 4.0. \url{https://doi.org/10.24432/C54S4K}
+
+\bibitem{dsads} Barshan B, Altun K (2010) Daily and sports activities. UCI Machine Learning Repository. Dataset. CC BY 4.0. \url{https://doi.org/10.24432/C5C59F}
+
+\bibitem{mhealth} Banos O, Garcia R (2014) MHEALTH. UCI Machine Learning Repository. Dataset. \url{https://doi.org/10.24432/C5TW22}
+
+\bibitem{wisdm} Weiss G (2019) WISDM Smartphone and Smartwatch Activity and Biometrics Dataset. UCI Machine Learning Repository. Dataset. \url{https://doi.org/10.24432/C5HK59}
+
+\bibitem{pamap} Reiss A (2012) PAMAP2 Physical Activity Monitoring. UCI Machine Learning Repository. Dataset. \url{https://doi.org/10.24432/C5NW2H}
+
+\bibitem{realdisp} Banos O, Toth M, Amft O (2012) REALDISP Activity Recognition Dataset. UCI Machine Learning Repository. Dataset. \url{https://doi.org/10.24432/C5GP6D}
+
+\bibitem{uschad} Zhang M, Sawchuk AA (2012) USC-HAD: A daily activity dataset for ubiquitous activity recognition using wearable sensors. UbiComp Workshop on Situation, Activity and Goal Awareness. \url{https://sipi.usc.edu/had/mi_ubicomp_sagaware12.pdf}
+
+\bibitem{sklearn} Pedregosa F, Varoquaux G, Gramfort A, et al (2011) Scikit-learn Machine learning in Python. Journal of Machine Learning Research 12:2825-2830. \url{https://jmlr.org/papers/v12/pedregosa11a.html}
+
+\bibitem{scipy} Virtanen P, Gommers R, Oliphant TE, et al (2020) SciPy 1.0: fundamental algorithms for scientific computing in Python. Nature Methods 17:261-272. \url{https://doi.org/10.1038/s41592-019-0686-2}
+\end{thebibliography}\end{document}

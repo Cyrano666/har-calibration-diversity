@@ -1,0 +1,15 @@
+{
+  "completed_cases": 249,
+  "model_fits_including_auxiliary": 996,
+  "new_model_fits": 692,
+  "reused_model_fits": 304,
+  "metric_rows": 2330598,
+  "eligible_subject_identifiers": 122,
+  "windows": 54482,
+  "primary_score": "LAC",
+  "confirmation_datasets": [
+    "pamap2",
+    "realdisp"
+  ],
+  "source": "Locked protocol; no rule tuning after confirmation"
+}

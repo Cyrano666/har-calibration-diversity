@@ -1,0 +1,189 @@
+{
+  "status": "passed",
+  "main_model_cases": 354,
+  "unique_dense_designs": 6,
+  "numerical_stopping_implication_checks": 1564481,
+  "exact_boundary_checks": [
+    {
+      "N": 120,
+      "checkpoints": 6,
+      "engine": "horizon",
+      "exact_any_time_failure": 0.04842672819556901
+    },
+    {
+      "N": 120,
+      "checkpoints": 6,
+      "engine": "hypergeom",
+      "exact_any_time_failure": 0.015397842595671606
+    },
+    {
+      "N": 120,
+      "checkpoints": 6,
+      "engine": "martingale",
+      "exact_any_time_failure": 0.0010301365317238998
+    },
+    {
+      "N": 120,
+      "checkpoints": 6,
+      "engine": "uncorrected",
+      "exact_any_time_failure": 0.062239469814521046
+    },
+    {
+      "N": 120,
+      "checkpoints": 5,
+      "engine": "sparse_checks",
+      "exact_any_time_failure": 0.04563676014259153
+    },
+    {
+      "N": 240,
+      "checkpoints": 12,
+      "engine": "horizon",
+      "exact_any_time_failure": 0.04605968099272103
+    },
+    {
+      "N": 240,
+      "checkpoints": 12,
+      "engine": "hypergeom",
+      "exact_any_time_failure": 0.014995051304251699
+    },
+    {
+      "N": 240,
+      "checkpoints": 12,
+      "engine": "martingale",
+      "exact_any_time_failure": 0.0021865098964357894
+    },
+    {
+      "N": 240,
+      "checkpoints": 12,
+      "engine": "uncorrected",
+      "exact_any_time_failure": 0.1412274968284783
+    },
+    {
+      "N": 240,
+      "checkpoints": 7,
+      "engine": "sparse_checks",
+      "exact_any_time_failure": 0.04715343577665215
+    },
+    {
+      "N": 360,
+      "checkpoints": 18,
+      "engine": "horizon",
+      "exact_any_time_failure": 0.04940877434444993
+    },
+    {
+      "N": 360,
+      "checkpoints": 18,
+      "engine": "hypergeom",
+      "exact_any_time_failure": 0.015563529375910132
+    },
+    {
+      "N": 360,
+      "checkpoints": 18,
+      "engine": "martingale",
+      "exact_any_time_failure": 0.002284813114913553
+    },
+    {
+      "N": 360,
+      "checkpoints": 18,
+      "engine": "uncorrected",
+      "exact_any_time_failure": 0.19600211421052335
+    },
+    {
+      "N": 360,
+      "checkpoints": 9,
+      "engine": "sparse_checks",
+      "exact_any_time_failure": 0.04786074472566311
+    },
+    {
+      "N": 480,
+      "checkpoints": 24,
+      "engine": "horizon",
+      "exact_any_time_failure": 0.0499088669268603
+    },
+    {
+      "N": 480,
+      "checkpoints": 24,
+      "engine": "hypergeom",
+      "exact_any_time_failure": 0.013039174041869446
+    },
+    {
+      "N": 480,
+      "checkpoints": 24,
+      "engine": "martingale",
+      "exact_any_time_failure": 0.002634731634910579
+    },
+    {
+      "N": 480,
+      "checkpoints": 24,
+      "engine": "uncorrected",
+      "exact_any_time_failure": 0.24746462904508412
+    },
+    {
+      "N": 480,
+      "checkpoints": 9,
+      "engine": "sparse_checks",
+      "exact_any_time_failure": 0.048964099688617556
+    },
+    {
+      "N": 720,
+      "checkpoints": 36,
+      "engine": "horizon",
+      "exact_any_time_failure": 0.04976016089537923
+    },
+    {
+      "N": 720,
+      "checkpoints": 36,
+      "engine": "hypergeom",
+      "exact_any_time_failure": 0.010904454652260444
+    },
+    {
+      "N": 720,
+      "checkpoints": 36,
+      "engine": "martingale",
+      "exact_any_time_failure": 0.0028146894422237984
+    },
+    {
+      "N": 720,
+      "checkpoints": 36,
+      "engine": "uncorrected",
+      "exact_any_time_failure": 0.29260380323445645
+    },
+    {
+      "N": 720,
+      "checkpoints": 11,
+      "engine": "sparse_checks",
+      "exact_any_time_failure": 0.047715969971106026
+    },
+    {
+      "N": 960,
+      "checkpoints": 48,
+      "engine": "horizon",
+      "exact_any_time_failure": 0.04980842411204006
+    },
+    {
+      "N": 960,
+      "checkpoints": 48,
+      "engine": "hypergeom",
+      "exact_any_time_failure": 0.011307818314682076
+    },
+    {
+      "N": 960,
+      "checkpoints": 48,
+      "engine": "martingale",
+      "exact_any_time_failure": 0.003420111248594559
+    },
+    {
+      "N": 960,
+      "checkpoints": 48,
+      "engine": "uncorrected",
+      "exact_any_time_failure": 0.3346015872866236
+    },
+    {
+      "N": 960,
+      "checkpoints": 12,
+      "engine": "sparse_checks",
+      "exact_any_time_failure": 0.048403770834489004
+    }
+  ],
+  "scope": "Exact rank-path failure probability for each finite design, not population test coverage."
+}

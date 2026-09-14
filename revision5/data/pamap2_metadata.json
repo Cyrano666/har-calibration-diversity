@@ -1,0 +1,135 @@
+{
+  "dataset": "pamap2",
+  "windows": 3775,
+  "subjects": 8,
+  "classes": 12,
+  "original_labels": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    12,
+    13,
+    16,
+    17,
+    24
+  ],
+  "subject_counts": {
+    "101": 487,
+    "102": 516,
+    "103": 342,
+    "104": 456,
+    "105": 535,
+    "106": 491,
+    "107": 457,
+    "108": 491,
+    "109": 12
+  },
+  "eligible_subjects": [
+    101,
+    102,
+    103,
+    104,
+    105,
+    106,
+    107,
+    108
+  ],
+  "excluded_for_less_than_120_windows": [
+    109
+  ],
+  "sensor": "chest \u00b116g acceleration",
+  "zero_based_signal_columns": [
+    21,
+    22,
+    23
+  ],
+  "duration_seconds": 5,
+  "shape": [
+    3775,
+    3,
+    128
+  ],
+  "feature_count": 35,
+  "resampling": "SciPy resample_poly, anti-aliased to 128 points with line padding",
+  "missing_policy": "reject if any axis has >2% nonfinite points in a window; otherwise interpolate within window",
+  "quality": [
+    {
+      "file": "PAMAP2_Dataset/Protocol/subject101.dat",
+      "subject": 101,
+      "raw_rows": 376417,
+      "retained_windows": 487,
+      "rejected_missing_windows": 5,
+      "sha256": "80b3fffd089c236ae88098df3b906b8d3c67a858023fe4f75045d78612147266"
+    },
+    {
+      "file": "PAMAP2_Dataset/Protocol/subject102.dat",
+      "subject": 102,
+      "raw_rows": 447000,
+      "retained_windows": 516,
+      "rejected_missing_windows": 4,
+      "sha256": "468f3c6ba3e6e961f383783665265afbcddbbd33a3a84bba0386b7d0d4e3c632"
+    },
+    {
+      "file": "PAMAP2_Dataset/Protocol/subject103.dat",
+      "subject": 103,
+      "raw_rows": 252833,
+      "retained_windows": 342,
+      "rejected_missing_windows": 1,
+      "sha256": "5be64631d085e3efc700728395516da3512ff9de17dab30d253508441a98d3f0"
+    },
+    {
+      "file": "PAMAP2_Dataset/Protocol/subject104.dat",
+      "subject": 104,
+      "raw_rows": 329576,
+      "retained_windows": 456,
+      "rejected_missing_windows": 1,
+      "sha256": "7eb272213cbfe11d9e466a2163b6c9c2ed8d2542fc6f08283fd1bf222cac8994"
+    },
+    {
+      "file": "PAMAP2_Dataset/Protocol/subject105.dat",
+      "subject": 105,
+      "raw_rows": 374783,
+      "retained_windows": 535,
+      "rejected_missing_windows": 4,
+      "sha256": "7837cfede57fe45ec20d553c6c2b0c498ab324daae23bfd202c0ffea9f71a7f6"
+    },
+    {
+      "file": "PAMAP2_Dataset/Protocol/subject106.dat",
+      "subject": 106,
+      "raw_rows": 361817,
+      "retained_windows": 491,
+      "rejected_missing_windows": 3,
+      "sha256": "0da1dda3fa56d75d6413fc9198949d3ebc2102d77574cb5fe0739674687609f2"
+    },
+    {
+      "file": "PAMAP2_Dataset/Protocol/subject107.dat",
+      "subject": 107,
+      "raw_rows": 313599,
+      "retained_windows": 457,
+      "rejected_missing_windows": 3,
+      "sha256": "a02195e9599eb249f79103912d27eb4f62d8a0f59e4763b0dd8250fee5f3f020"
+    },
+    {
+      "file": "PAMAP2_Dataset/Protocol/subject108.dat",
+      "subject": 108,
+      "raw_rows": 408031,
+      "retained_windows": 491,
+      "rejected_missing_windows": 25,
+      "sha256": "81ce6b21b9c1e01dc02099c4f9387699547b08b28b387d09a56e0cb0a8af22fc"
+    },
+    {
+      "file": "PAMAP2_Dataset/Protocol/subject109.dat",
+      "subject": 109,
+      "raw_rows": 8477,
+      "retained_windows": 12,
+      "rejected_missing_windows": 0,
+      "sha256": "5109d5cd8334769566b4ae602adf3e5f4bb7b9ee8ca678f0c481d333114b07c7"
+    }
+  ],
+  "signal_sha256": "dc409aba22205df4aae849eb46dc312377769e9cb458904545861493a7b3def3",
+  "stage": "Metadata/preprocessing only, before final method lock; no predictions inspected"
+}

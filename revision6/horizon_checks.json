@@ -1,0 +1,149 @@
+{
+  "status": "passed",
+  "cases": [
+    {
+      "N": 5,
+      "alpha": 0.1,
+      "delta": 0.05,
+      "enumerated_crossing": 0.0,
+      "dp_crossing": 0.0,
+      "permutations": 120
+    },
+    {
+      "N": 5,
+      "alpha": 0.1,
+      "delta": 0.2,
+      "enumerated_crossing": 0.0,
+      "dp_crossing": 0.0,
+      "permutations": 120
+    },
+    {
+      "N": 5,
+      "alpha": 0.3,
+      "delta": 0.05,
+      "enumerated_crossing": 0.0,
+      "dp_crossing": 0.0,
+      "permutations": 120
+    },
+    {
+      "N": 5,
+      "alpha": 0.3,
+      "delta": 0.2,
+      "enumerated_crossing": 0.0,
+      "dp_crossing": 0.0,
+      "permutations": 120
+    },
+    {
+      "N": 5,
+      "alpha": 0.5,
+      "delta": 0.05,
+      "enumerated_crossing": 0.0,
+      "dp_crossing": 0.0,
+      "permutations": 120
+    },
+    {
+      "N": 5,
+      "alpha": 0.5,
+      "delta": 0.2,
+      "enumerated_crossing": 0.0,
+      "dp_crossing": 0.0,
+      "permutations": 120
+    },
+    {
+      "N": 6,
+      "alpha": 0.1,
+      "delta": 0.05,
+      "enumerated_crossing": 0.0,
+      "dp_crossing": 0.0,
+      "permutations": 720
+    },
+    {
+      "N": 6,
+      "alpha": 0.1,
+      "delta": 0.2,
+      "enumerated_crossing": 0.0,
+      "dp_crossing": 0.0,
+      "permutations": 720
+    },
+    {
+      "N": 6,
+      "alpha": 0.3,
+      "delta": 0.05,
+      "enumerated_crossing": 0.0,
+      "dp_crossing": 0.0,
+      "permutations": 720
+    },
+    {
+      "N": 6,
+      "alpha": 0.3,
+      "delta": 0.2,
+      "enumerated_crossing": 0.06666666666666667,
+      "dp_crossing": 0.06666666666666667,
+      "permutations": 720
+    },
+    {
+      "N": 6,
+      "alpha": 0.5,
+      "delta": 0.05,
+      "enumerated_crossing": 0.0,
+      "dp_crossing": 0.0,
+      "permutations": 720
+    },
+    {
+      "N": 6,
+      "alpha": 0.5,
+      "delta": 0.2,
+      "enumerated_crossing": 0.11666666666666667,
+      "dp_crossing": 0.11666666666666667,
+      "permutations": 720
+    },
+    {
+      "N": 7,
+      "alpha": 0.1,
+      "delta": 0.05,
+      "enumerated_crossing": 0.0,
+      "dp_crossing": 0.0,
+      "permutations": 5040
+    },
+    {
+      "N": 7,
+      "alpha": 0.1,
+      "delta": 0.2,
+      "enumerated_crossing": 0.0,
+      "dp_crossing": 0.0,
+      "permutations": 5040
+    },
+    {
+      "N": 7,
+      "alpha": 0.3,
+      "delta": 0.05,
+      "enumerated_crossing": 0.047619047619047616,
+      "dp_crossing": 0.047619047619047616,
+      "permutations": 5040
+    },
+    {
+      "N": 7,
+      "alpha": 0.3,
+      "delta": 0.2,
+      "enumerated_crossing": 0.047619047619047616,
+      "dp_crossing": 0.047619047619047616,
+      "permutations": 5040
+    },
+    {
+      "N": 7,
+      "alpha": 0.5,
+      "delta": 0.05,
+      "enumerated_crossing": 0.0,
+      "dp_crossing": 0.0,
+      "permutations": 5040
+    },
+    {
+      "N": 7,
+      "alpha": 0.5,
+      "delta": 0.2,
+      "enumerated_crossing": 0.05714285714285714,
+      "dp_crossing": 0.05714285714285714,
+      "permutations": 5040
+    }
+  ]
+}

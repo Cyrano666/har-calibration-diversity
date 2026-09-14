@@ -1,0 +1,24 @@
+{
+  "status": "passed",
+  "model_cases": 354,
+  "primary_baseline_reconstruction": "matches frozen V6 to1e-12",
+  "post_hoc": true,
+  "priors": [
+    [
+      0.5,
+      0.5
+    ],
+    [
+      1,
+      1
+    ],
+    [
+      1.8,
+      0.2
+    ],
+    [
+      9,
+      1
+    ]
+  ]
+}

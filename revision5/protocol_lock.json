@@ -1,0 +1,9 @@
+{
+  "locked_at_utc": "2026-09-11T15:03:32.874072+00:00",
+  "protocol_sha256": "649d0e32cf28777b988dad017a466c770cbbe85338f6d661b27eb7b21de8e820",
+  "confirmation_predictions_exist": false,
+  "prepared_arrays": {
+    "pamap2": "430954dda5ab787e4028639294b93328a8a553f16f707692cc44c7fff4daa8e9",
+    "realdisp": "c367b568acbeef417b211faef3a6497f9bdf614c5bc99c3a449fe9232d6945b7"
+  }
+}
