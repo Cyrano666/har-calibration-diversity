@@ -26,7 +26,7 @@ The main study includes seven public datasets and 354 fitted classifier cases. S
 
 ## Additional independent-cohort confirmation
 
-The separately specified HHAR study is complete: nine users, 10,800 retained windows and 45 additional LR/MR/IT cases. Its protocol was [publicly committed before preprocessing outcomes or model fitting](https://github.com/Cyrano666/har-calibration-diversity/commit/4cf2155). At the pre-specified primary setting (LAC, N=240, delta=0.05, tau=0.5), label savings are 34.03% for JRC, 28.58% for HG and 25.13% for the fixed Beta(9,1) CS. JRC threshold failure is 1.33% and monitoring-batch inflation failure is 0.28%.
+The separately specified HHAR study is complete: nine users, 10,800 retained windows and 45 additional LR/MR/IT cases. Its protocol was [publicly committed before preprocessing outcomes or model fitting](https://github.com/Cyrano666/jrc-reference-emulation/commit/4cf2155). At the pre-specified primary setting (LAC, N=240, delta=0.05, tau=0.5), label savings are 34.03% for JRC, 28.58% for HG and 25.13% for the fixed Beta(9,1) CS. JRC threshold failure is 1.33% and monitoring-batch inflation failure is 0.28%.
 
 Paired participant-bootstrap differences are 5.45 percentage points versus HG (95% CI 5.09–5.85) and 8.89 versus Beta(9,1) CS (8.52–9.23), conditional on the fitted models and partitions. All 45 acquisition cases were replayed and matched their frozen outputs. The continuity rule retains very few Nexus4 windows, so this does not establish uniform validation across every original device stream. It does not measure human annotation time.
 
@@ -42,20 +42,24 @@ python get_artifacts.py
 python reproduce.py --smoke
 ```
 
-The artifact download is approximately 350 MB and supplies frozen predictions and evaluation records. The smoke run compares one complete main-study acquisition case with the frozen results. For the additional HHAR study use `python confirmation_hhar/reproduce.py --smoke`, or omit `--smoke` to replay its 45 cases. If you have already extracted the full Online Resource 1 archive, skip the download command. For all 354 cases run `python reproduce.py`. Quantitative plots can be rebuilt with `python revision7/figures.py`; install Arial to match the distributed typography. Acquisition replay uses saved probabilities and does not require CUDA or classifier refitting.
+The artifact download is approximately 350 MB and supplies frozen predictions and evaluation records. The smoke run compares one complete main-study acquisition case with the frozen results. For the additional HHAR study use `python confirmation_hhar/reproduce.py --smoke`, or omit `--smoke` to replay its 45 cases. If you have already extracted the full Online Resource 1 archive, skip the download command. For all 354 cases run `python reproduce.py`. Quantitative plots can be rebuilt with `python visualization/rebuild_figures.py`; install Arial to match the distributed typography. Acquisition replay uses saved probabilities and does not require CUDA or classifier refitting.
 
 ## Repository map
 
 | Path | Purpose |
 |---|---|
 | paper/ | Current review PDF and complete LaTeX source |
-| figures/ | Editable architecture and vector scientific plots |
+| figures/ | Editable architecture and current vector scientific plots |
+| visualization/ | Current figure regeneration scripts |
+| confirmation_hhar/ | Separately specified additional confirmation study |
 | docs/ | Reproduction, statistical scope and data provenance |
 | revision6/ | Locked JRC implementation, main evaluation and summary tables |
 | revision7/ | Subsequent stronger-prior diagnostic and figure builder |
 | revision/, revision5/ | Shared score/model/preprocessing code and earlier-study evidence |
 | artifacts.json | Versioned release URL and SHA-256 of Online Resource 1 |
 
-The scientific directory names are retained so that imports and locked-file checksums remain stable. Results with small gains and the earlier unsuccessful acquisition study remain available in the supplement. Larger numerical files are distributed through [Releases](https://github.com/Cyrano666/har-calibration-diversity/releases), keeping the clone focused on code and readable outputs.
+The scientific directory names are retained so that imports and locked-file checksums remain stable. Results with small gains and the earlier unsuccessful acquisition study remain available in the supplement. Larger numerical files are distributed through [Releases](https://github.com/Cyrano666/jrc-reference-emulation/releases), keeping the clone focused on code and readable outputs.
 
 The guarantee is conditional on a fixed pool and uniform sampling without replacement. It preserves reference sets for every input and controls average inflation on the declared monitoring batch. It does not repair a poorly calibrated reference or establish new population coverage under arbitrary shift. Human annotation time was not measured.
+
+The repository was renamed from har-calibration-diversity to jrc-reference-emulation to reflect the current method. Historical study directories remain unchanged so that protocol hashes and imports stay valid. The editable manuscript is in paper/latex/; the release includes a flat LaTeX ZIP for journal upload.

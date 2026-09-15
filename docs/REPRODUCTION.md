@@ -12,7 +12,7 @@ The artifact installer preserves newer paper/figure/documentation files in the c
 - `python reproduce.py`: all 354 cases and the aggregate tables.
 - `python revision6/reproduce.py --resume --output PATH`: resume a timestamped output directory.
 - `python revision7/prior_audit.py --full`: reconstruct the subsequent four-prior diagnostic.
-- `python revision7/figures.py`: reconstruct quantitative figures; the editable architecture is supplied under figures/.
+- `python visualization/rebuild_figures.py`: reconstruct quantitative figures; the editable architecture is supplied under figures/.
 
 Reproductions create timestamped output directories and preserve the locked reference results. These commands do not fit new classifiers and do not establish an independent confirmation experiment.
 

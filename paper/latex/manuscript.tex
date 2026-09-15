@@ -19,7 +19,7 @@
 \emergencystretch=2em
 \begin{document}
 \title[Emulating conformal reference sets]{Label-efficient emulation of conformal reference sets for wearable activity recognition}
-\abstract{Labeling a complete calibration pool can be expensive when a deployed recognition system already has a fixed calibration reference. We introduce joint rank calibration, a procedure that emulates this finite reference using sequential label queries. A coupled rank-state recursion calibrates the probability of crossing either quantile boundary at any declared query checkpoint. Acquisition stops when the endpoint prediction sets differ by at most a chosen average number of labels on an unlabeled monitoring batch. With high probability over uniform query order, the output contains the reference sets for every input and satisfies the batch-specific inflation tolerance. This conditional guarantee allows arbitrary dependence among fixed pool scores; it does not establish nominal population coverage for a deficient reference. The main study uses seven public wearable-activity datasets and 354 classifier cases, including a prospectively locked USC-HAD confirmation. With confidence error 0.05 and tolerance 0.5 extra labels, confirmation label savings are 23.67\%, compared with 17.91\% for Bonferroni hypergeometric intervals and 11.74\% for a uniform-prior confidence sequence. A subsequent stronger-prior audit raises the latter baseline to 15.33\%, while the proposed result remains unchanged. Savings vary substantially across datasets, including limited gains on difficult recognition problems. A separately specified nine-user confirmation adds 45 classifier cases and yields 34.03\% savings versus 25.13\% for the stronger-prior baseline.}
+\abstract{Labeling a complete calibration pool can be expensive when a reference pool has been specified for a recognition system. We introduce joint rank calibration, a procedure that emulates this finite reference using sequential label queries. A coupled rank-state recursion calibrates the probability of crossing either quantile boundary at any declared query checkpoint. Acquisition stops when the endpoint prediction sets differ by at most a chosen average number of labels on an unlabeled monitoring batch. With high probability over uniform query order, the output contains the reference sets for every input and satisfies the batch-specific inflation tolerance. This conditional guarantee allows arbitrary dependence among fixed pool scores; it does not establish nominal population coverage for a deficient reference. The main study uses seven public wearable-activity datasets and 354 classifier cases, including a prospectively locked USC-HAD confirmation. With confidence error 0.05 and tolerance 0.5 extra labels, confirmation label savings are 23.67\%, compared with 17.91\% for Bonferroni hypergeometric intervals and 11.74\% for a uniform-prior confidence sequence. A subsequent stronger-prior audit raises the latter baseline to 15.33\%, while the proposed result remains unchanged. Savings vary substantially across datasets, including limited gains on difficult recognition problems. A separately specified nine-user confirmation adds 45 classifier cases and yields 34.03\% savings versus 25.13\% for the stronger-prior baseline.}
 \keywords{Human activity recognition, Conformal prediction, Label acquisition, Finite-population inference, Sequential calibration}
 \maketitle
 \section{Introduction}
@@ -80,7 +80,7 @@ Figure~\ref{fig:1} shows the frozen-model and query workflow. Algorithm~\ref{alg
 
 \begin{figure*}[t]\centering
 \makebox[\textwidth][c]{\includegraphics[width=174mm]{Fig1.pdf}}
-\caption{Overall architecture of JRC. A frozen classifier supplies the class-score matrices. Offline rank boundaries depend on the pool size, reference rank, confidence error and declared checkpoints. The query loop returns a threshold with reference-set containment and batch-specific inflation control}\label{fig:1}
+\caption{Workflow of joint rank calibration: (a) fixed model and inputs; (b) label-free calibration of rank boundaries; (c) sequential querying and prediction-set stopping. For compactness, $L$ and $U$ denote the running bounds $\overline L_t$ and $\overline U_t$; $D_t$ is the statistic in Eq.~\eqref{eq:width}. The full-reference quantile defines the target and is not supplied to the acquisition policy}\label{fig:1}
 \end{figure*}
 
 \subsection{Target, information and cost}
@@ -301,7 +301,7 @@ USC-HAD & 90.36 & 2.590 & 23.67 & 17.91 & 11.74 & 0.179 \\
 
 \begin{figure*}[t]\centering
 \makebox[\textwidth][c]{\includegraphics[width=174mm]{Fig2.pdf}}
-\caption{Label savings at confidence error 0.05 and tolerance 0.5: (a) LAC; (b) APS. Solid, hatched and cross-hatched bars identify JRC, Bonferroni hypergeometric brackets and the primary uniform-prior confidence sequence. Values average the declared pool ceilings and participant summaries}\label{fig:2}
+\caption{Main-study reference-label savings: (a) LAC; (b) APS, at confidence error 0.05 and tolerance 0.5. Bars use a common zero-based scale and distinct fill patterns; labels are rounded to one decimal place. The confidence-sequence comparator uses the primary uniform prior. Values average the declared pool ceilings and participant summaries; paired uncertainty is reported in Section~\ref{sec:paired}}\label{fig:2}
 \end{figure*}
 On USC-HAD, the joint engine saves 23.67\% of reference labels, compared with 17.91\% for HG and 11.74\% for the prior/posterior CS. Its mean coverage is 91.80\%, against 90.36\% for the reference, and mean set size changes from 2.590 to 2.769. The coverage increase comes from the more inclusive calibration threshold; the point classifiers are unchanged.
 
@@ -333,12 +333,12 @@ No time correction & 33.71 & 91.73 & 2.766 & 6.29 & 3.02 \\
 
 \begin{figure*}[t]\centering
 \makebox[\textwidth][c]{\includegraphics[width=174mm]{Fig3.pdf}}
-\caption{USC-HAD LAC failure diagnostics: (a) output threshold below the full-reference threshold; (b) monitoring-batch inflation above 0.5 labels. The horizontal line marks 5\%. Fixed fractions, midpoint output (Mid) and uncorrected repeated looks (Uncorr.) do not have the JRC contract}\label{fig:3}
+\caption{USC-HAD LAC failure diagnostics: (a) output threshold below the full-reference threshold; (b) monitoring-batch inflation above 0.5 labels. The dashed line is $\delta=5\%$. The first three bars are the simultaneous-coverage comparators; dotted gray bars are diagnostic rules without the same guarantee. The labels 25\%, 50\% and 75\% denote fractions of reference labels queried; Mid is midpoint output and Uncorr. is uncorrected repeated looks}\label{fig:3}
 \end{figure*}
 The proposed confirmation threshold-failure rate is 2.04\%, and its batch size-failure rate is 0.72\%. The confidence statement applies to one query campaign. A failure of the scalar threshold bracket may not remove any label on the finite observed input batch if no candidate score lies in the gap.
 
 The reference itself must remain useful. On the development sets, some references do not achieve nominal 90\% coverage despite disjoint participant roles, and WISDM returns many candidate activities. The policy preserves these reference sets rather than solving their recognition or calibration deficiencies.
-\subsection{Paired improvements and classifier dependence}
+\subsection{Paired improvements and classifier dependence}\label{sec:paired}
 Figure~\ref{fig:4} reports paired participant bootstrap intervals for additional savings against the quantile-interval baselines. These intervals condition on the fitted models and split collection. Table~\ref{tab:models} separates point-classification performance from acquisition outcomes for each confirmation backbone. The acquisition policy does not retrain or select among these classifiers.
 
 \begin{figure*}[t]\centering
@@ -389,7 +389,7 @@ Figure~\ref{fig:6} traces the first declared USC-HAD MR query campaign at a 480-
 
 \begin{figure*}[t]\centering
 \makebox[\textwidth][c]{\includegraphics[width=174mm]{Fig6.pdf}}
-\caption{First declared USC-HAD MR query run, LAC, 480 reference windows: (a) upper quantile endpoints represented as the corresponding probability cutoff $1-U_t$ on a logarithmic axis; (b) endpoint set-size difference with stopping locations marked. The reference quantile is approximately 0.999436. Zero cutoffs and infinite upper bounds are displayed at $10^{-16}$ in (a); this is only a display convention. The horizontal line in (b) is the 0.5-label tolerance}\label{fig:6}
+\caption{First declared USC-HAD MR query run, LAC, 480 reference windows: (a) running upper quantile endpoints represented as the corresponding probability cutoff $1-\overline U_t$ on a logarithmic axis; (b) endpoint set-size difference with stopping locations marked. The reference quantile is approximately 0.999436. Zero cutoffs and infinite upper bounds are displayed at $10^{-16}$ in (a); this is only a display convention. The horizontal line in (b) is the 0.5-label tolerance}\label{fig:6}
 \end{figure*}
 Figure~\ref{fig:7} relates label savings to absolute reference set size and shows the corresponding reference/returned coverage pairs.
 
@@ -490,7 +490,7 @@ Finite-pool reference emulation offers a concrete target for reducing calibratio
 \backmatter
 \section*{Data and supporting materials}
 \subsection*{Data availability}
-The original datasets are available from the sources cited in this article. Code and documentation are available at \url{https://github.com/Cyrano666/har-calibration-diversity}. Online Resource 1 provides frozen classifier probabilities, result tables, protocol locks and verification records. Raw USC-HAD recordings are obtained from their original provider. The archive index maps the manuscript figures and tables to their source files and distinguishes the locked main experiment from subsequent diagnostics. Boundary-table construction and the joint recursion are implemented in \texttt{revision6/horizon.py}. From the repository root, \texttt{python get\_artifacts.py} retrieves the verified numerical artifacts and \texttt{python reproduce.py --smoke} checks one complete acquisition case; omitting \texttt{--smoke} replays all main cases. The separate HHAR replay is \texttt{python confirmation\_hhar/reproduce.py --smoke}.
+The original datasets are available from the sources cited in this article. Code and documentation are available at \url{https://github.com/Cyrano666/jrc-reference-emulation}. Online Resource 1 provides frozen classifier probabilities, result tables, protocol locks and verification records. Raw USC-HAD recordings are obtained from their original provider. The archive index maps the manuscript figures and tables to their source files and distinguishes the locked main experiment from subsequent diagnostics. Boundary-table construction and the joint recursion are implemented in \texttt{revision6/horizon.py}. From the repository root, \texttt{python get\_artifacts.py} retrieves the verified numerical artifacts and \texttt{python reproduce.py --smoke} checks one complete acquisition case; omitting \texttt{--smoke} replays all main cases. The separate HHAR replay is \texttt{python confirmation\_hhar/reproduce.py --smoke}.
 \subsection*{Supplementary material}
 Online Resource 1: reproduction code, frozen predictions and evaluation tables, protocol and verification records, the stronger-prior diagnostic, and figure sources. The archive index maps each figure and table to its source files.
 
