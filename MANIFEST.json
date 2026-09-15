@@ -1286,33 +1286,33 @@
   },
   {
     "path": "figures/Fig2.eps",
-    "bytes": 168248,
-    "sha256": "3c77d59be449fdeff1101595c961a885c00f6ae7437e99ba43cb58333f36674d"
+    "bytes": 110798,
+    "sha256": "d28b518f46ffb97d7412cf7bf30997ed23b83d7fd8f7ef03a30adca233777ef5"
   },
   {
     "path": "figures/Fig2.pdf",
-    "bytes": 45433,
-    "sha256": "d6e2afd5db0424b70790290341a1b23e3be3d3c5bd22f176b4a28c50b43751d0"
+    "bytes": 29816,
+    "sha256": "4859dac01f19ba7f8f2ec52a199fb14701f6bf2741830f8d4e8761a2c6d868a6"
   },
   {
     "path": "figures/Fig2.png",
-    "bytes": 357649,
-    "sha256": "ffe6cf90affed508ce976dbf6a1149e05a828b093b2c4f977fe5149402e928fd"
+    "bytes": 251408,
+    "sha256": "50954872149ddcd58aa4752ee57729a2d1ed87a65d9e3b1e33fc602edc8bc240"
   },
   {
     "path": "figures/Fig3.eps",
-    "bytes": 225187,
-    "sha256": "f456efc4bd0780ec28b4cae8166fe30a0074ba36d22ca0aeedef688e4e49b36b"
+    "bytes": 115349,
+    "sha256": "854c1a775428bec3d56cf7fc3fd442f7fb04b8e882b024998f46fb67e5020630"
   },
   {
     "path": "figures/Fig3.pdf",
-    "bytes": 59313,
-    "sha256": "4fc2c1ee2de13d466dde454927da715d1656e34124503a792faa22af8c41978f"
+    "bytes": 34638,
+    "sha256": "94150302ddb4296e44250c12a664c94ecbf808f02ed750389161f847f01d3312"
   },
   {
     "path": "figures/Fig3.png",
-    "bytes": 283953,
-    "sha256": "35f57d5f3bee86f76cb7834169c1ce04b4d470b6bc4a87455ebdca36eb336a61"
+    "bytes": 168092,
+    "sha256": "cd0865af6d2a2fa1787fe5227121117efa0d1e4e8474cdbb721dc305a7fc97a0"
   },
   {
     "path": "figures/Fig4.eps",
@@ -1376,8 +1376,8 @@
   },
   {
     "path": "figures/README.md",
-    "bytes": 941,
-    "sha256": "ae8197f3a4257813f0b08634043f6efa48428e50431f9b018d040b34d4cf9692"
+    "bytes": 1064,
+    "sha256": "761d6e91e3422b43a29d5d57c259587e27935b1cb77e53ab49431b75aa7da97a"
   },
   {
     "path": "figures/architecture_preview.png",
@@ -1401,13 +1401,13 @@
   },
   {
     "path": "paper/latex/Fig2.pdf",
-    "bytes": 45433,
-    "sha256": "d6e2afd5db0424b70790290341a1b23e3be3d3c5bd22f176b4a28c50b43751d0"
+    "bytes": 29816,
+    "sha256": "4859dac01f19ba7f8f2ec52a199fb14701f6bf2741830f8d4e8761a2c6d868a6"
   },
   {
     "path": "paper/latex/Fig3.pdf",
-    "bytes": 59313,
-    "sha256": "4fc2c1ee2de13d466dde454927da715d1656e34124503a792faa22af8c41978f"
+    "bytes": 34638,
+    "sha256": "94150302ddb4296e44250c12a664c94ecbf808f02ed750389161f847f01d3312"
   },
   {
     "path": "paper/latex/Fig4.pdf",
@@ -1436,8 +1436,8 @@
   },
   {
     "path": "paper/latex/manuscript.tex",
-    "bytes": 70005,
-    "sha256": "6da818a09c7ad6897558298883e8d356cedcb115f9494ab07d3f33b74e5aa1b8"
+    "bytes": 70038,
+    "sha256": "ff2fed37af77a6097de4834a732a3e870ab2190325c07b91b20275c70110214f"
   },
   {
     "path": "paper/latex/sn-basic.bst",
@@ -1451,8 +1451,8 @@
   },
   {
     "path": "paper/manuscript.pdf",
-    "bytes": 819218,
-    "sha256": "2121b1eba6e291522c34dbaa54eb3ec73a86a59a2250c7a567b609662589a229"
+    "bytes": 780787,
+    "sha256": "4702ca61a7fb67f7fca5c8093f5eada6399ea4d68f92f4953d4de510cd8c6f00"
   },
   {
     "path": "reproduce.py",
@@ -13341,7 +13341,7 @@
   },
   {
     "path": "visualization/replot_summary_bars.py",
-    "bytes": 4365,
-    "sha256": "a2758ffbf7de8f78709bd628ed9cf166b5c4af6a40d68d88108c3e7f504fc2c8"
+    "bytes": 4281,
+    "sha256": "d5b493db2013110cac26379a9b0f2a8f0a2a8f7e44e444e6c483855ba44f460a"
   }
 ]
